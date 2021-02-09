@@ -34,9 +34,9 @@ const userSchema = new mongoose.Schema({
     }
     , role: {
         type: Number,
-        required: true,
+        trim: true,
     },
-    salt: Number,
+    salt: String,
     about: {
         type: String,
     },
@@ -57,14 +57,38 @@ userSchema
     .set(function (password) {
         this._password = password;
         this.salt = this.makeSalt();
-        this.hash_password = this.makeEncryptPassword()
+        this.hash_password = this.makeEncryptPassword(password)
     })
     .get(function () {
         return this._password;
 
     })
 
-userSchema.methods =
+userSchema.methods = {
+    authonticate: function (plainText) {
+        return this.makeEncryptPassword(plainText) === this.hash_password
+
+    },
+    makeEncryptPassword: function (password) {
+        if (!password) return ''
+        try {
+            return crypto
+                .createHmac('sha1', this.salt)
+                .update(password)
+                .digest('hex')
 
 
-    module.export = mongoose.model('User', userSchema)
+
+        } catch (e) {
+            return ''
+
+        }
+
+    },
+    makeSalt: function () {
+        return Math.round(new Date().valueOf() * Math.random()) + ''
+    }
+}
+
+
+module.exports = User = mongoose.model('user', userSchema)
