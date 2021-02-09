@@ -16,9 +16,8 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.get('/', (req, res) => {
-    res.json({ time: new Date().toString() })
-})
+const userRouter = require('./routers/user')
+app.use('/api', userRouter)
 
 const port = process.env.PORT || 8000
 app.listen(port, () => {
