@@ -1,13 +1,13 @@
 import Layout from "../components/Layout"
 import Link from 'next/Link'
-const Index = () => {
+const Signin = () => {
     return (
         <Layout>
-            <h2>Hello NextJs</h2>
-            <Link href='/signup'>Signup</Link>
+            <h2>Signin Page</h2>
+            <Link href='/'>Home</Link>
             <Link href='/signin'>Signin</Link>
         </Layout>
     )
 }
 
-export default Index
+export default Signin
