@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react'
-import { SignupAPI } from '../../actions/auth'
+import { SignupAPI, isAuth } from '../../actions/auth'
+import Router from 'next/router'
 const SignupForm = () => {
 
     const [value, setvalue] = useState({
@@ -8,9 +9,13 @@ const SignupForm = () => {
     })
 
     const { name, email, password, loading, error, message, showForm, } = value
+
+    useEffect(() => {
+        isAuth() && Router.push('/')
+    }, [])
     const submitHandler = (e) => {
         e.preventDefault()
-        setvalue({ ...value, loading: true, error: false })
+        setvalue({ ...value, loading: true, error: false, message: '' })
         const user = { name, email, password }
         SignupAPI(user)
             .then(data => {
@@ -36,6 +41,10 @@ const SignupForm = () => {
 
     }
 
+    const showLoading = () => (loading ? <div className="alert alert-info">Loading...</div> : '')
+    const showLError = () => (error ? <div className="alert alert-danger">{error}</div> : '')
+    const showMessage = () => (message ? <div className="alert alert-info">{message}</div> : '')
+
     const SignForm = () => {
         return (
             <form onSubmit={submitHandler}>
@@ -57,8 +66,10 @@ const SignupForm = () => {
     }
     return (
         <React.Fragment>
-
-            { SignForm()}
+            {showLoading()}
+            {showLError()}
+            {showMessage()}
+            {showForm && SignForm()}
         </React.Fragment>
     )
 }

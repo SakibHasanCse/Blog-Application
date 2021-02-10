@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { APPNAME } from '../config'
 import Link from 'next/Link'
+import Router from 'next/router'
 import {
     Collapse,
     Navbar,
@@ -16,6 +17,8 @@ import {
 
     NavbarText
 } from 'reactstrap';
+import { isAuth, signout } from '../actions/auth';
+
 
 const Header = (props) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -53,14 +56,22 @@ const Header = (props) => {
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </Nav>
-                    <Link href="/signin">
+                    {!isAuth() && <React.Fragment>
+                        <Link href="/signin">
 
-                        <NavbarText> Signin</NavbarText>
-                    </Link>
-                    <Link href="/signup">
+                            <NavbarText style={{ cursor: 'pointer' }} > Signin</NavbarText>
+                        </Link>
+                        <Link href="/signup">
 
-                        <NavbarText className="pl-2">Signup</NavbarText>
-                    </Link>
+                            <NavbarText style={{ cursor: 'pointer' }} className="pl-2">Signup</NavbarText>
+                        </Link>
+                    </React.Fragment>}
+
+                    {isAuth() && (
+
+                        <NavbarText style={{ cursor: 'pointer' }} onClick={() => signout(() => Router.replace('/signin'))} className="pl-2">Signout</NavbarText>
+                    )}
+
                 </Collapse>
             </Navbar>
         </div>
