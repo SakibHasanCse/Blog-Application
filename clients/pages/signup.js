@@ -1,11 +1,11 @@
 import Layout from "../components/Layout"
 import Link from 'next/Link'
+import SignupForm from "../components/auth/SignupComponent"
 const Signin = () => {
     return (
         <Layout>
             <h2>Signin Page</h2>
-            <Link href='/'>Home</Link>
-            <Link href='/signin'>Signin</Link>
+            <SignupForm />
         </Layout>
     )
 }

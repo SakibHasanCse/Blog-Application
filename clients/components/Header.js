@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { APPNAME } from '../config'
+import Link from 'next/Link'
 import {
     Collapse,
     Navbar,
@@ -12,6 +13,7 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
+
     NavbarText
 } from 'reactstrap';
 
@@ -22,7 +24,8 @@ const Header = (props) => {
     return (
         <div>
             <Navbar color="light" light expand="md">
-                <NavbarBrand href="/">{APPNAME}</NavbarBrand>
+                <Link href='/'><NavbarBrand className="font-weight-bold">{APPNAME}</NavbarBrand></Link>
+
                 <NavbarToggler onClick={toggle} />
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="mr-auto" navbar>
@@ -50,7 +53,14 @@ const Header = (props) => {
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </Nav>
-                    <NavbarText>Simple Text</NavbarText>
+                    <Link href="/signin">
+
+                        <NavbarText> Signin</NavbarText>
+                    </Link>
+                    <Link href="/signup">
+
+                        <NavbarText className="pl-2">Signup</NavbarText>
+                    </Link>
                 </Collapse>
             </Navbar>
         </div>
