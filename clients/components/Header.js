@@ -67,14 +67,34 @@ const Header = (props) => {
                         </Link>
                     </React.Fragment>}
 
+                    {isAuth() && isAuth().role === 0 && (
+                        <Link href="/user">
+                            <NavbarText style={{ cursor: 'pointer' }} className="pl-2">
+                                {isAuth().name}'s Dashboard
+                        </NavbarText>
+                        </Link>
+
+                    )}
+                    {isAuth() && isAuth().role === 1 && (
+                        <Link href="/admin">
+                            <NavbarText style={{ cursor: 'pointer' }} className="pl-2">
+                                {isAuth().name}'s Dashboard
+                        </NavbarText>
+                        </Link>
+                    )}
+
                     {isAuth() && (
 
+
                         <NavbarText style={{ cursor: 'pointer' }} onClick={() => signout(() => Router.replace('/signin'))} className="pl-2">Signout</NavbarText>
+
+
                     )}
+
 
                 </Collapse>
             </Navbar>
-        </div>
+        </div >
     );
 }
 
