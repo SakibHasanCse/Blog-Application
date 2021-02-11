@@ -15,7 +15,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 }
 
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieparser())
@@ -23,10 +22,14 @@ app.use(cookieparser())
 
 const authRouter = require('./routers/auth')
 const userRouter = require('./routers/user')
+const categoryRouter = require('./routers/category')
+const TagsRouter = require('./routers/tags')
 
 
 app.use('/api', userRouter)
 app.use('/api', authRouter)
+app.use('/api', categoryRouter)
+app.use('/api', TagsRouter)
 
 const port = process.env.PORT || 8000
 app.listen(port, () => {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { APPNAME } from '../config'
 import Link from 'next/Link'
 import Router from 'next/router'
+import Nprogress from 'nprogress'
 import {
     Collapse,
     Navbar,
@@ -19,6 +20,9 @@ import {
 } from 'reactstrap';
 import { isAuth, signout } from '../actions/auth';
 
+Router.onRouteChangeStart = url => Nprogress.start()
+Router.onRouteChangeComplete = url => Nprogress.done()
+Router.onRouteChangeError = url => Nprogress.done()
 
 const Header = (props) => {
     const [isOpen, setIsOpen] = useState(false);

@@ -9,9 +9,5 @@ router.post('/signup', userSignUpValidator, runValidation, Signup);
 router.post('/signin', userSiginValidator, runValidation, Signin)
 router.get('/signout', signout)
 
-//test 
-router.get('/test', requireSignin, (req, res) => {
-    res.json({ message: 'You are get Secret key' })
-})
 
 module.exports = router
