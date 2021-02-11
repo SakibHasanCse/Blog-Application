@@ -7,6 +7,8 @@ exports.createCategory = async (req, res, next) => {
         const { name } = req.body
         const slug = slugify(name).toLowerCase()
 
+
+
         const newCategory = new Category({ name, slug })
 
         await newCategory.save((err, data) => {
@@ -22,6 +24,8 @@ exports.createCategory = async (req, res, next) => {
 
 
     } catch (error) {
+        console.log(err)
+
 
     }
 }
