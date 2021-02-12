@@ -5,16 +5,16 @@ import { CreateCategory, CategoryList, DeleteCategory } from '../../actions/cate
 
 const Categories = () => {
     const [value, setValue] = useState({
-        name: '', error: false, success: false, categories: [], removed: false
+        name: '', error: false, success: false, categories: [], removed: false, reload: false
     })
 
-    const { name, error, success, categories, removed } = value
+    const { name, error, success, categories, removed, reload } = value
 
     const token = getCookie('token')
 
     useEffect(() => {
         loadCategory()
-    }, [])
+    }, [reload])
 
 
     const loadCategory = async () => {
@@ -30,7 +30,10 @@ const Categories = () => {
 
     const ShowCategory = () => {
         return categories.map((category, i) => {
-            return <button onDoubleClick={() => DeleteConfram(category.slug)} title="Double Click to delete category" key={i} className="btn btn-outline-primary mr-1 ml-1 mt-3 ">{category.name}</button>
+            return <button onDoubleClick={() => DeleteConfram(category.slug)}
+                title="Double Click to delete category"
+                key={i}
+                className="btn btn-outline-primary mr-1 ml-1 mt-3 ">{category.name}</button>
         })
     }
 
@@ -47,7 +50,7 @@ const Categories = () => {
                 if (data.error) {
                     console.log(data.error)
                 } else {
-                    setValue({ ...value, error: false })
+                    setValue({ ...value, error: false, reload: !reload, removed: !removed })
                 }
             })
 
@@ -55,20 +58,24 @@ const Categories = () => {
 
     const submitHandler = (e) => {
         e.preventDefault()
-
         CreateCategory(token, { name }).then(data => {
             if (data.error) {
-                setValue({ ...value, success: false, message: data.error, error: true, removed: '' })
-
+                setValue({ ...value, success: false, error: true, })
             } else {
-                setValue({ ...value, success: true, name: '', message: data.message, error: false, removed: true, })
+                setValue({ ...value, success: true, name: '', reload: !reload, removed: '', message: data.message, error: false, })
             }
         })
 
     }
-    // const showError = () => error ? (<div className="alert alert-danger">{error}</div>) : ''
-    // const showMessage = () => error ? (<div className="alert alert-info">{message}</div>) : ''
 
+    const showError = () => error ? <div className="text-danger">Category already exists</div> : ''
+    const showSuccess = () => success ? <div className="text-info">Category is created successfully</div> : ''
+    const showRemoved = () => removed ? <div className="text-danger">Category is removed</div> : ''
+
+    const mouseMoveHandler = (e) => {
+        setValue({ ...value, error: false, success: false, removed: '' })
+
+    }
 
     const handleChange = (e) => {
         setValue({ ...value, name: e.target.value, error: false, success: false, removed: '' })
@@ -86,10 +93,11 @@ const Categories = () => {
     return (
 
         <React.Fragment>
-            {/* {  showError()} */}
-            {/* {  showMessage()} */}
-            {  CategoryForm()}
-            <div>
+            {  showError()}
+            {  showSuccess()}
+            {  showRemoved()}
+            <div onMouseMove={mouseMoveHandler}>
+                {CategoryForm()}
                 {ShowCategory()}
             </div>
 

@@ -1,36 +1,86 @@
 
 import React, { useState, useEffect } from 'react'
 import { getCookie } from '../../actions/auth'
-import { CreateCategory } from '../../actions/category'
+import { CreateTags, TagsList, DeleteTags } from '../../actions/Tags'
 
-const Categories = () => {
+const Tags = () => {
     const [value, setValue] = useState({
-        name: '', error: false, success: false, categories: [], removed: false
+        name: '', error: false, success: false, tags: [], removed: false, reload: false
     })
 
-    const { name, error, success, categories, removed } = value
+    const { name, error, success, tags, removed, reload } = value
 
     const token = getCookie('token')
-    const submitHandler = async (e) => {
-        e.preventDefault()
-        await CreateCategory(token, name).then(data => {
+
+    useEffect(() => {
+        loadTags()
+    }, [reload])
+
+
+    const loadTags = async () => {
+        await TagsList().then((data) => {
             if (data.error) {
-                setValue({ ...value, success: false, message: data.error, error: true, removed: '' })
+                console.log(data.error)
 
             } else {
-                setValue({ ...value, success: true, message: data.message, error: fale, removed: true })
+                setValue({ ...value, tags: data })
+            }
+        })
+    }
+
+    const ShowTags = () => {
+        return tags.map((Tags, i) => {
+            return <button onDoubleClick={() => DeleteConfram(Tags.slug)}
+                title="Double Click to delete Tags"
+                key={i}
+                className="btn btn-outline-primary mr-1 ml-1 mt-3 ">{Tags.name}</button>
+        })
+    }
+
+    const DeleteConfram = (slug) => {
+        const anser = window.confirm('Are you sure you want to delete')
+        if (anser) {
+            deleteCat(slug)
+        }
+
+    }
+    const deleteCat = (slug) => {
+        DeleteTags(slug, token)
+            .then((data) => {
+                if (data.error) {
+                    console.log(data.error)
+                } else {
+                    setValue({ ...value, error: false, reload: !reload, removed: !removed })
+                }
+            })
+
+    }
+
+    const submitHandler = (e) => {
+        e.preventDefault()
+        CreateTags(token, { name }).then(data => {
+            if (data.error) {
+                setValue({ ...value, success: false, error: true, })
+            } else {
+                setValue({ ...value, success: true, name: '', reload: !reload, removed: '', message: data.message, error: false, })
             }
         })
 
     }
-    const showError = error ? <div className="alert alert-danger">{error}</div> : ''
-    const showMessage = error ? <div className="alert alert-info">{message}</div> : ''
 
+    const showError = () => error ? <div className="text-danger">Tags already exists</div> : ''
+    const showSuccess = () => success ? <div className="text-info">Tags is created successfully</div> : ''
+    const showRemoved = () => removed ? <div className="text-danger">Tags is removed</div> : ''
+
+    const mouseMoveHandler = (e) => {
+        setValue({ ...value, error: false, success: false, removed: '' })
+
+    }
 
     const handleChange = (e) => {
         setValue({ ...value, name: e.target.value, error: false, success: false, removed: '' })
     }
-    const CategoryForm = () => (
+    const TagsForm = () => (
         <form onSubmit={submitHandler}>
             <div className="form-group">
                 <lable className="text-muted">Name</lable>
@@ -44,11 +94,15 @@ const Categories = () => {
 
         <React.Fragment>
             {  showError()}
-            {  showMessage()}
-            {  CategoryForm()}
+            {  showSuccess()}
+            {  showRemoved()}
+            <div onMouseMove={mouseMoveHandler}>
+                {TagsForm()}
+                {ShowTags()}
+            </div>
 
         </React.Fragment>
     )
 }
 
-export default Categories
+export default Tags

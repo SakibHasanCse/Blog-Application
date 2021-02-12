@@ -24,12 +24,14 @@ const authRouter = require('./routers/auth')
 const userRouter = require('./routers/user')
 const categoryRouter = require('./routers/category')
 const TagsRouter = require('./routers/tags')
+const BlogRouter = require('./routers/blog')
 
 
 app.use('/api', userRouter)
 app.use('/api', authRouter)
 app.use('/api', categoryRouter)
 app.use('/api', TagsRouter)
+app.use('/api', BlogRouter)
 
 const port = process.env.PORT || 8000
 app.listen(port, () => {
