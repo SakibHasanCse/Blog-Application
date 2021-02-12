@@ -24,7 +24,9 @@ exports.createCategory = async (req, res, next) => {
 
 
     } catch (error) {
-        console.log(err)
+
+        error: errorHandler(err)
+
 
 
     }

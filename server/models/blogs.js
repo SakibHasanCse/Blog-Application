@@ -5,7 +5,7 @@ const BlogsSchema = new mongoose.Schema({
 
     title: {
         type: String,
-        // required: true,
+        required: true,
         trim: true,
         min: 3,
         max: 160
@@ -17,8 +17,8 @@ const BlogsSchema = new mongoose.Schema({
     },
     body: {
         type: {},
-        // required: true,
-        min: 2,
+        required: true,
+        min: 200,
         max: 2000000
 
     },
@@ -34,15 +34,17 @@ const BlogsSchema = new mongoose.Schema({
     }, photo: {
         data: Buffer,
         contentType: String
-    }, catagories: {
+    }, categories: [{
         type: ObjectId,
         ref: 'category',
-        //  required: true
-    }, tags: {
+        required: true,
+
+    }], tags: [{
         type: ObjectId,
         ref: 'tags',
-        // required: true
-    }, postedBy: {
+        required: true,
+
+    }], postedBy: {
         type: ObjectId,
         ref: User
     }
