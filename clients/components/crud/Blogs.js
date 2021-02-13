@@ -13,12 +13,32 @@ import 'react-quill/dist/quill.snow.css';
 
 
 const CreateBlogs = ({ router }) => {
-    console.log(JSON.stringify(router))
+    const [values, setValues] = useState({
+        success: '', error: '', sizeError: '', title: '', formData: '', hidePublishButton: false
+    })
+    const { success, error, sizeError, title, formData, hidePublishButton } = values
+    const [body, setBody] = useState({})
+
+    const readyBlog = (e) => {
+        e.preventDefault()
+        console.log('readyBlog')
+    }
+    const changeHandler = name => e => {
+        console.log(e.target.value)
+    }
+    const handleBody = e => {
+        console.log(e)
+    }
+
     const BlogFrom = () => {
         return (
-            <form action="">
+            <form onSubmit={readyBlog}>
                 <div className="form-group">
-                    <input type="text" className="form-control" />
+                    <lable className="text-muted">Name</lable>
+                    <input type="text" onChange={changeHandler('title')} value={title} className="form-control" />
+                </div>
+                <div className="form-group">
+                    <ReactQuill modules={CreateBlog.modules} formats={CreateBlog.formats} placeholder="write something  amazing ..." value={body} onChange={handleBody} />
                 </div>
             </form>
         )
@@ -30,4 +50,21 @@ const CreateBlogs = ({ router }) => {
 
     )
 }
+
+CreateBlog.modules = {
+    toolbar: [
+        [{ header: '1 ' }, { header: '2' }, { header: [3, 4, 5, 6] }, { font: [] }],
+        [{ size: [] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image', 'video'],
+        ['clean'],
+        ['code-block']
+
+    ]
+
+}
+CreateBlog.formats = [
+    'header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'link', 'image', 'video', 'code-block'
+]
 export default withRouter(CreateBlogs)
