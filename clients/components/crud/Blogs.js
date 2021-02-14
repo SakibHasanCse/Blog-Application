@@ -13,21 +13,49 @@ import 'react-quill/dist/quill.snow.css';
 
 
 const CreateBlogs = ({ router }) => {
+
+    const blogFromLS = () => {
+        if (typeof window === 'undefined') {
+            return false
+        }
+
+        if (localStorage.getItem('blog')) {
+            return JSON.parse(localStorage.getItem('blog'))
+        } else {
+            false
+        }
+
+    }
+
+
     const [values, setValues] = useState({
         success: '', error: '', sizeError: '', title: '', formData: '', hidePublishButton: false
     })
+    const [body, setBody] = useState(blogFromLS())
     const { success, error, sizeError, title, formData, hidePublishButton } = values
-    const [body, setBody] = useState({})
 
     const readyBlog = (e) => {
         e.preventDefault()
         console.log('readyBlog')
     }
+
+    useEffect(() => {
+        setValues({ ...values, formData: new FormData() })
+
+    }, [router])
+
     const changeHandler = name => e => {
-        console.log(e.target.value)
+        const value = name === 'photo' ? e.target.files[0] : e.target.value;
+        formData.set(name, value)
+        setValues({ ...values, [name]: value, formData, error: '' })
     }
     const handleBody = e => {
-        console.log(e)
+        setBody(e)
+        formData.set('body', e)
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('blog', JSON.stringify(e))
+        }
+
     }
 
     const BlogFrom = () => {
@@ -46,6 +74,10 @@ const CreateBlogs = ({ router }) => {
     return (
         <React.Fragment>
             {BlogFrom()}
+            <hr />
+            {JSON.stringify(title)}
+            <hr />
+            {JSON.stringify(body)}
         </React.Fragment>
 
     )
