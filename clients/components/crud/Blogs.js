@@ -31,7 +31,7 @@ const CreateBlogs = ({ router }) => {
     const [values, setValues] = useState({
         success: '', error: '', sizeError: '', title: '', formData: '', hidePublishButton: false
     })
-    const [body, setBody] = useState(blogFromLS())
+    const [body, setBody] = useState()
     const { success, error, sizeError, title, formData, hidePublishButton } = values
 
     const readyBlog = (e) => {
