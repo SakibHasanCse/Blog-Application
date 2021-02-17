@@ -10,6 +10,7 @@ import Link from 'next/link'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 import 'react-quill/dist/quill.snow.css';
+import { quillformats, Quillmodules } from '../../helpers/quill.js'
 
 
 const CreateBlogs = ({ router }) => {
@@ -43,9 +44,9 @@ const CreateBlogs = ({ router }) => {
         CreateBlog(token, formData).then((data) => {
             console.log(data)
             if (data.error) {
-                setValues({ ...values, error: data.error })
+                setValues({ ...values, error: data.error, success: '' })
             } else {
-                setValues({ ...values, title: '', error: '', message: `A New BLog titled ${data.title} is Created` })
+                setValues({ ...values, title: '', error: '', success: `A New BLog titled ${data.title} is Created` })
                 setBody('')
                 setCategories([])
                 setTags([])
@@ -83,7 +84,7 @@ const CreateBlogs = ({ router }) => {
     const changeHandler = name => e => {
         const value = name === 'photo' ? e.target.files[0] : e.target.value;
         formData.set(name, value)
-        setValues({ ...values, [name]: value, formData, error: '' })
+        setValues({ ...values, [name]: value, formData, error: '', success: '' })
     }
     const handleBody = e => {
         setBody(e)
@@ -95,7 +96,7 @@ const CreateBlogs = ({ router }) => {
     }
 
     const handleChangeChaked = c => () => {
-        setValues({ ...values, error: '' })
+        setValues({ ...values, error: '', })
         const checkedCategory = checked.indexOf(c)
         const all = [...checked]
         if (checkedCategory === -1) {
@@ -108,7 +109,7 @@ const CreateBlogs = ({ router }) => {
         formData.set('categories', all)
     }
     const handleChangeChakedTags = c => () => {
-        setValues({ ...values, error: '' })
+        setValues({ ...values, error: '', })
         const clickedTags = checkedTags.indexOf(c)
         const all = [...checkedTags]
         if (clickedTags === -1) {
@@ -146,6 +147,12 @@ const CreateBlogs = ({ router }) => {
             ))
         )
     }
+    const ErrorMessage = () => (
+        <div className="alert alert-danger" style={{ display: error ? '' : 'none' }}>{error}</div>
+    )
+    const showSuccess = () => (
+        <div className="alert alert-info" style={{ display: success ? '' : 'none' }}>{success}</div>
+    )
 
     const BlogFrom = () => {
         return (
@@ -155,7 +162,7 @@ const CreateBlogs = ({ router }) => {
                     <input type="text" onChange={changeHandler('title')} value={title} className="form-control" />
                 </div>
                 <div className="form-group">
-                    <ReactQuill modules={CreateBlog.modules} formats={CreateBlog.formats} placeholder="write something  amazing ..." value={body} onChange={handleBody} />
+                    <ReactQuill modules={Quillmodules} formats={quillformats} placeholder="write something  amazing ..." value={body} onChange={handleBody} />
                 </div>
                 <button className="btn btn-primary">Publish</button>
             </form>
@@ -164,7 +171,13 @@ const CreateBlogs = ({ router }) => {
     return (
         <div className="container-fluid">
             <div className="row">
+
                 <div className="col-md-8">
+                    <div>
+                        {ErrorMessage()}
+                        {showSuccess()}
+                    </div>
+
                     {BlogFrom()}
                 </div>
                 <div className="col-md-4">
@@ -201,20 +214,4 @@ const CreateBlogs = ({ router }) => {
     )
 }
 
-CreateBlog.modules = {
-    toolbar: [
-        [{ header: '1 ' }, { header: '2' }, { header: [3, 4, 5, 6] }, { font: [] }],
-        [{ size: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['link', 'image', 'video'],
-        ['clean'],
-        ['code-block']
-
-    ]
-
-}
-CreateBlog.formats = [
-    'header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'link', 'image', 'video', 'code-block'
-]
 export default withRouter(CreateBlogs)
