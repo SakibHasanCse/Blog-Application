@@ -19,3 +19,23 @@ export const CreateBlog = async (token, blog) => {
         })
         .catch(err => console.log(err))
 }
+
+
+export const ListBlogwithCategoryAndTags = async () => {
+
+
+    return fetch(`${API}/blogs-categories-tags`, {
+        method: 'POST',
+        headers: {
+
+            Accept: 'application/json',
+
+        },
+
+    })
+        .then((response) => {
+
+            return response.json()
+        })
+        .catch(err => console.log(err))
+}

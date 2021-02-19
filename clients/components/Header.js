@@ -39,27 +39,15 @@ const Header = (props) => {
                         <NavItem>
                             <NavLink href="/components/">Components</NavLink>
                         </NavItem>
-                        <NavItem>
-                            <NavLink href="/">GitHub</NavLink>
+                        <NavItem >
+                            <Link href="/blogs">
+
+                                <NavLink style={{ cursor: 'pointer', textWeight: 'bold', }}>Blog</NavLink>
+                            </Link>
                         </NavItem>
-                        <UncontrolledDropdown nav inNavbar>
-                            <DropdownToggle nav caret>
-                                Options
-              </DropdownToggle>
-                            <DropdownMenu right>
-                                <DropdownItem>
-                                    Option 1
-                </DropdownItem>
-                                <DropdownItem>
-                                    Option 2
-                </DropdownItem>
-                                <DropdownItem divider />
-                                <DropdownItem>
-                                    Reset
-                </DropdownItem>
-                            </DropdownMenu>
-                        </UncontrolledDropdown>
+
                     </Nav>
+
                     {!isAuth() && <React.Fragment>
                         <Link href="/signin">
 

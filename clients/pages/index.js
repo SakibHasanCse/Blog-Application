@@ -3,9 +3,10 @@ import Link from 'next/Link'
 const Index = () => {
     return (
         <Layout>
-            <h2>Hello NextJs</h2>
-            <Link href='/signup'>Signup</Link>
-            <Link href='/signin'>Signin</Link>
+
+            <div className="container">
+                <h4 className="text-center p-5">Welcome To Our Blog</h4>
+            </div>
         </Layout>
     )
 }

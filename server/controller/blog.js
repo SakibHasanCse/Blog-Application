@@ -66,7 +66,7 @@ exports.createBlog = async (req, res, next) => {
                 blog.photo.data = fs.readFileSync(files.photo.path)
                 blog.photo.contentType = files.photo.type
             }
-
+            console.log(blog)
 
             blog.save((err, data) => {
                 if (err) {
