@@ -21,16 +21,18 @@ export const CreateBlog = async (token, blog) => {
 }
 
 
-export const ListBlogwithCategoryAndTags = async () => {
+export const ListBlogwithCategoryAndTags = async (skip, limit) => {
 
-
+    const data = { skip: skip, limit: limit }
     return fetch(`${API}/blogs-categories-tags`, {
         method: 'POST',
         headers: {
 
             Accept: 'application/json',
+            'Content-Type': 'application/json'
 
         },
+        body: JSON.stringify(data)
 
     })
         .then((response) => {
