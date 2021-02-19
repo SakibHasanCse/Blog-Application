@@ -25,7 +25,7 @@ const BLogCart = ({ blog }) => {
         <div className="lead">
             <header>
                 <Link href={`/blogs/${blog.slug}`}>
-                    <a><h2 className="display-4 font-weight-bold">{blog.title}</h2></a>
+                    <a><h2 className=" font-weight-bold">{blog.title}</h2></a>
                 </Link>
             </header>
             <section>
@@ -43,7 +43,7 @@ const BLogCart = ({ blog }) => {
             <div className="row">
                 <div className="col-md-4">
                     <section>
-                        <img alt={blog.title} style={{ height: '150px', width: '100%' }} className="img img-fluid" src={`${API}/blog/photo/${blog.slug}`} />
+                        <img alt={blog.title} style={{ objectFit: 'cover', maxHeight: "300px", height: 'auto', width: '100%' }} className="img img-fluid" src={`${API}/blog/photo/${blog.slug}`} />
                     </section>
 
                 </div>

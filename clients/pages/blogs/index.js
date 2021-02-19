@@ -6,8 +6,28 @@ import { ListBlogwithCategoryAndTags } from '../../actions/blog'
 import moment from 'moment'
 import renderHTML from 'react-render-html';
 import BlogCard from '../../components/BlogCard'
+import { API, DOMAIN, FBID, APPNAME } from '../../config'
+import { withRouter } from 'next/router'
+const Blogs = ({ blogs, categories, tags, size, router }) => {
+    const head = () => (
+        <Head>
+            <title>Sakib Blogs | {APPNAME}</title>
+            <meta name="description" content="Sakib Blogs all type of posts and categories" />
+            <link rel="canonical" href={`${DOMAIN} ${router.pathname}`} />
+            <meta property="og:title" content={`New Blog Posts | ${APPNAME}`} />
 
-const Blogs = ({ blogs, categories, tags, size }) => {
+            <meta property="og:description" content='blog article on my website sakib' />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content={`${DOMAIN} ${router.pathname}`} />
+            <meta property="og:site_name" content={`${APPNAME}`} />
+            <meta property="og:image" content={`${DOMAIN}/static/images/seoimage.jpg`} />
+            <meta property="og:image:secure_url" content={`${DOMAIN}/static/images/seoimage.jpg`} />
+            <meta property="og:image:type" content="image/jpg" />
+            <meta property="fb:app_id" content={`${FBID}`} />
+
+        </Head>
+    )
+
 
     const showALlBlogs = () => {
         return (
@@ -44,6 +64,7 @@ const Blogs = ({ blogs, categories, tags, size }) => {
     }
     return (
         <React.Fragment>
+            {head()}
             <Layout>
                 <main>
                     <div className="container-fluid">
@@ -92,4 +113,4 @@ Blogs.getInitialProps = () => {
         }
     })
 }
-export default Blogs
+export default withRouter(Blogs)
