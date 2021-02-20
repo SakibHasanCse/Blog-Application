@@ -44,7 +44,7 @@ const Blogs = ({ blogs, categories, tags, TotalBlogs,
             } else {
                 setLoadedBlogs([...loadedBlogs, ...data.blogs])
                 setSkip(toSkip)
-                setSize(data.length)
+                setSize(data.size)
             }
         })
 

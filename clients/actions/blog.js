@@ -41,3 +41,9 @@ export const ListBlogwithCategoryAndTags = async (skip, limit) => {
         })
         .catch(err => console.log(err))
 }
+export const SingleBlogAPI = (slug) => {
+    return fetch(`${API}/blog/${slug}`, { method: 'GET' }).then((response) => {
+        return response.json()
+    }).catch(err => console.log(err))
+
+}

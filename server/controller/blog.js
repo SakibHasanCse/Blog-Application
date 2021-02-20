@@ -21,6 +21,13 @@ exports.createBlog = async (req, res, next) => {
                     error: 'Image could not uploaded'
                 })
             }
+            if (!files.photo) {
+
+                return res.status(400).json({
+
+                    error: 'Feature Image is required'
+                })
+            }
 
             const { title, body, categories, tags } = fields
             if (!title || !title.length) {
