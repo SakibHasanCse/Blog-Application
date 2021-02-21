@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react'
 import Layout from '../../components/Layout'
 import Link from 'next/link'
 import Head from 'next/head'
-import { ListBlogwithCategoryAndTags, SingleBlogAPI } from '../../actions/blog'
+import { ListBlogwithCategoryAndTags, RelateBlogs, SingleBlogAPI } from '../../actions/blog'
 import moment from 'moment'
 import renderHTML from 'react-render-html';
 import BlogCard from '../../components/BlogCard'
 import { API, DOMAIN, FBID, APPNAME } from '../../config'
 import { withRouter } from 'next/router'
+import SmallCard from '../../components/SmallCard'
 
 const SingleBlog = ({ blog, router }) => {
     const head = () => {
@@ -26,16 +27,27 @@ const SingleBlog = ({ blog, router }) => {
                 <meta property="og:image:secure_url" content={`${API}/blog/photo/${blog.slug}`} />
                 <meta property="og:image:type" content="image/jpg" />
                 <meta property="fb:app_id" content={`${FBID}`} />
-
-
-
-
-
             </Head>
         )
 
     }
 
+    const [related, setRelated] = useState([])
+
+
+    const loadRelatedProducts = () => {
+        RelateBlogs({ blog }).then(data => {
+            if (data.error) {
+
+            } else {
+                setRelated(data)
+
+            }
+        })
+    }
+    useEffect(() => {
+        loadRelatedProducts()
+    }, [])
     const ShowCategory = (blog) => {
         return blog.categories.map((category, i) => (
             <Link href={`/catagory/${category.slug}`}>
@@ -51,6 +63,17 @@ const SingleBlog = ({ blog, router }) => {
             </Link>
 
         ))
+    }
+
+    const showrelatedProperties = () => {
+        return related && related.map((blog, i) => (
+
+            <div key={i} className="col-md-4 col-sm-6">
+                <SmallCard blog={blog} />
+
+            </div>
+        ))
+
     }
     return (
         <React.Fragment>
@@ -97,7 +120,10 @@ const SingleBlog = ({ blog, router }) => {
                                 <h4 className="text-center pt-5 pb-5 h2"> Related Blogs
                                        </h4>
                                 <hr />
-                                <p>Show relared blog</p>
+                                <div className="row">
+
+                                    {showrelatedProperties()}
+                                </div>
 
                             </section>
                         </div>

@@ -47,3 +47,9 @@ export const SingleBlogAPI = (slug) => {
     }).catch(err => console.log(err))
 
 }
+
+export const RelateBlogs = (blog) => {
+    return fetch(`${API}/blogs/releted`, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(blog) }).then((response) => {
+        return response.json()
+    }).catch(err => console.log(err))
+}

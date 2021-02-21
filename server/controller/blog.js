@@ -323,3 +323,30 @@ exports.blogPhoto = async (req, res) => {
         return res.status(200).send(data.photo.data)
     })
 }
+
+exports.relatedProducts = async (req, res) => {
+    try {
+        const limit = req.body.limit ? parseInt(req.body.limit) : 3
+        const { categories, _id } = req.body.blog
+
+        await Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
+            .limit(limit)
+
+            .populate('categories', '_id name slug')
+            .populate('tags', '_id name slug')
+            .populate('postedBy', '_id name username')
+            .select('_id title slug excerpt categories tags postedBy createdAt updatedAt')
+            .then(data => {
+                return res.status(200).json(data)
+            }).catch(err => {
+                console.log(err)
+                return res.status(400).json({ error: 'Internal server error , try again' })
+            })
+
+    } catch (err) {
+        console.log(err)
+
+        return res.status(400).json({ error: 'Internal server error , try again' })
+
+    }
+}
