@@ -1,7 +1,8 @@
-import Layout from "../../../components/Layout"
-import Link from 'next/Link'
+import React from 'react'
 import Admin from "../../../components/auth/Admin"
-import NewBlogs from "../../../components/crud/Create-blog"
+import ReadAllBlog from '../../../components/crud/ReadBlogs'
+
+import Layout from '../../../components/Layout'
 
 const Blogs = () => {
     return (
@@ -9,24 +10,19 @@ const Blogs = () => {
             <Admin>
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="col-md-12 pt-5 pb-5">
-                            <h2 className="text-center">Create a new blog</h2>
+                        <div className="col-md-12 pt-4 pb-4">
+                            <h2>Manage Blogs</h2>
                         </div>
                         <div className="col-md-12">
-                            <h6 className="text-center">Categories</h6>
-
-                            <NewBlogs />
+                            <ReadAllBlog />
 
                         </div>
-
                     </div>
                 </div>
 
-
             </Admin>
-
         </Layout>
     )
-}
 
+}
 export default Blogs

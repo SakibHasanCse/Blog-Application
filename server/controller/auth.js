@@ -111,4 +111,6 @@ exports.authAdminMiddleware = async (req, res, next) => {
 
 }
 
-exports.requireSignin = expressJTW({ secret: process.env.JWT_TOKEN, algorithms: ['HS256'] })
+exports.requireSignin = expressJTW({ secret: process.env.JWT_TOKEN, algorithms: ['HS256'] }), (err, req, res, next) => {
+    console.log(err)
+}
