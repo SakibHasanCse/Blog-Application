@@ -54,6 +54,8 @@ const ReadAllBlog = () => {
                 <h3 >{blog.title}</h3>
                 <p className="mark">Written by {blog.postedBy.name} | Published on {moment(blog.updatedAt).fromNow()}</p>
                 <button className="btn btn-sm btn-danger" onClick={() => DeleteBlog(blog.slug)}>Delete</button>
+                <button className="btn btn-sm btn-info pl-1" onClick={() => UpdateBlog(blog.slug)}>Update</button>
+
                 <hr />
             </div>
         ))
