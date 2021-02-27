@@ -3,13 +3,10 @@ import { allListAPI, deleteBlog } from '../../actions/blog'
 import moment from 'moment'
 import { getCookie } from '../../actions/auth'
 
-
-
 const ReadAllBlog = () => {
     const [blogs, setBlog] = useState([])
     const [message, setMessage] = useState({})
     const token = getCookie('token')
-
 
     useEffect(() => {
         loadProducts()
