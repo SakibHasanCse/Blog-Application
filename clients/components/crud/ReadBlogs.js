@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { allListAPI, deleteBlog } from '../../actions/blog'
 import moment from 'moment'
-import { getCookie } from '../../actions/auth'
+import { getCookie, isAuth } from '../../actions/auth'
+import Link from 'next/link'
+
 
 const ReadAllBlog = () => {
     const [blogs, setBlog] = useState([])
@@ -25,7 +27,7 @@ const ReadAllBlog = () => {
     const deleteBlogbyslug = (slug) => {
         deleteBlog(slug, token).then((data) => {
             if (data.error) {
-
+                setMessage(data.error)
             } else {
                 setMessage(data.message)
                 loadProducts()
@@ -41,17 +43,31 @@ const ReadAllBlog = () => {
 
 
     }
-    const showMessage = () => (
-        <div className="alert alert-danger" style={{ display: message ? '' : 'none' }}>{message}</div>
-    )
+    const UpdateBlog = (slug) => {
+        if (isAuth() && isAuth().role == 0) {
+            return (
+                <Link href={`/user/crud/${slug}`}>
+                    <a className="btn btn-info btn-sm" >Update</a>
+
+                </Link>
+            )
+        } else if (isAuth() && isAuth().role === 1) {
+            return <Link href={`/admin/crud/${slug}`}>
+                <a className="btn btn-info ml-1 btn-sm" >Update</a>
+            </Link>
+
+        }
+
+    }
+
 
     const showBlog = () => {
         return blogs && blogs.map((blog, i) => (
             <div key={i} className="pb-5 ">
                 <h3 >{blog.title}</h3>
                 <p className="mark">Written by {blog.postedBy.name} | Published on {moment(blog.updatedAt).fromNow()}</p>
-                <button className="btn btn-sm btn-danger" onClick={() => DeleteBlog(blog.slug)}>Delete</button>
-                <button className="btn btn-sm btn-info pl-1" onClick={() => UpdateBlog(blog.slug)}>Update</button>
+                <button className="btn btn-sm btn-danger " onClick={() => DeleteBlog(blog.slug)}>Delete</button>
+                {UpdateBlog(blog.slug)}
 
                 <hr />
             </div>
@@ -62,8 +78,8 @@ const ReadAllBlog = () => {
     return (
         <React.Fragment>
             <div className="container">
+                {/* {message && <div className="alert alert-danger">{message}</div>} */}
                 <div className="row">
-                    {showMessage()}
                     {showBlog()}
                 </div>
             </div>
