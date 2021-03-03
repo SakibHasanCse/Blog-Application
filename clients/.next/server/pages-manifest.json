@@ -3,7 +3,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/admin/crud/blogs": "pages/admin/crud/blogs.js",
-  "/blogs": "pages/blogs.js",
-  "/next/dist/pages/_error": "pages/next/dist/pages/_error.js",
   "/admin/crud/[slug]": "pages/admin/crud/[slug].js"
 }
