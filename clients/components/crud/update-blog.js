@@ -16,6 +16,10 @@ import { quillformats, Quillmodules } from '../../helpers/quill.js'
 
 
 const UpdateBlog = ({ router }) => {
+    const changeHandler = name => e => {
+        
+    }
+
     const BlogFrom = () => {
         return (
             <form onSubmit={readyBlog}>
@@ -34,7 +38,7 @@ const UpdateBlog = ({ router }) => {
         <div className="container-fluid">
             <div className="row">
                 <div className="col-md-8">
-                    show form
+                    {BlogFrom()}
                 </div>
                 <div className="col-md-4">
                     show categories
