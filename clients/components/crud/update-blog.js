@@ -17,7 +17,10 @@ import { quillformats, Quillmodules } from '../../helpers/quill.js'
 
 const UpdateBlog = ({ router }) => {
     const changeHandler = name => e => {
-        
+
+    }
+    const submitHandler = (slug) => {
+
     }
 
     const BlogFrom = () => {
