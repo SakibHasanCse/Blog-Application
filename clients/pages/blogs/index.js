@@ -141,7 +141,7 @@ const Blogs = ({ blogs, categories, tags, TotalBlogs,
 
 Blogs.getInitialProps = () => {
     var skip = 0;
-    var limit = 1
+    var limit = 5
     return ListBlogwithCategoryAndTags(skip, limit).then((data) => {
 
         if (data.error) {
