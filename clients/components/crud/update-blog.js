@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SingleBlogAPI } from '../../actions/blog.js'
+import { SingleBlogAPI, UpdateBlogAPI } from '../../actions/blog.js'
 import { isAuth, getCookie } from '../../actions/auth'
 import Router from 'next/router'
 import dynamic from 'next/dynamic'
@@ -12,6 +12,7 @@ import Link from 'next/link'
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 import 'react-quill/dist/quill.snow.css';
 import { quillformats, Quillmodules } from '../../helpers/quill.js'
+
 
 
 
@@ -28,7 +29,7 @@ const UpdateBlog = ({ router }) => {
         success: '', error: '', formData: '', title: '',
     })
     const { success, error, formData, title, } = values
-
+    var token = getCookie('token')
 
 
 
@@ -40,16 +41,36 @@ const UpdateBlog = ({ router }) => {
     }, [router])
     const readyBlog = (e) => {
         e.preventDefault()
+        UpdateBlogAPI(token, formData, router.query.slug).then(data => {
+            console.log(data)
+            if (data.error) {
+                setValues({ ...values, error: data.error })
+            } else {
+                setValues({ ...values, title: '', error: '', success: `Blog  titled "${data.title}" Updated Successfully`, body: '' })
+                if (isAuth() && isAuth().role == 1) {
+                    Router.replace(`/admin/crud/${router.query.slug}`)
+
+                } else if (isAuth() && isAuth().role == 0) {
+                    Router.replace(`/user/crud/${router.query.slug}`)
+
+                }
+            }
+        })
+
 
 
     }
-    const changeBody = (e) => {
-        setBody(e)
-        formData.set('body', e)
-    }
-    const editBlog = () => {
 
-    }
+    const ShowError = () => (
+        <div className="alert alert-danger" style={{ display: error ? '' : 'none' }}>{error}</div>
+
+    )
+    const ShowMessage = () => (
+        <div className="alert alert-info" style={{ display: success ? '' : 'none' }}>{success}</div>
+
+    )
+
+
 
     const changeHandler = name => e => {
         var value = name === 'photo' ? e.target.files[0] : e.target.value
@@ -135,6 +156,7 @@ const UpdateBlog = ({ router }) => {
         } else {
             all.splice(CheckedTags, 1)
         }
+        setCheckedTags(all)
 
         formData.set('tags', all)
     }
@@ -200,6 +222,10 @@ const UpdateBlog = ({ router }) => {
             <div className="row">
                 <div className="col-md-8">
                     {BlogFrom()}
+                    <div className="pt-3">
+                        {ShowError()}
+                        {ShowMessage()}
+                    </div>
                 </div>
                 <div className="col-md-4">
                     <div>

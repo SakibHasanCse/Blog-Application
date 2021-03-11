@@ -18,6 +18,20 @@ export const CreateBlog = async (token, blog) => {
         .catch(err => console.log(err))
 }
 
+export const UpdateBlogAPI = async (token, data, slug) => {
+    return fetch(`${API}/blog/${slug}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+
+        },
+        body: data,
+
+    }).then((response) => {
+        return response.json()
+    }).catch(err => console.log(err))
+}
 
 export const ListBlogwithCategoryAndTags = async (skip, limit) => {
     const data = { skip: skip, limit: limit }
@@ -78,3 +92,4 @@ export const deleteBlog = async (slug, token) => {
             console.log(err)
         })
 }
+

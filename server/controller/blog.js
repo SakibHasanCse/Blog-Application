@@ -186,7 +186,7 @@ exports.updateBlog = async (req, res) => {
 
                 if (categories) {
 
-                    oldblog.catategories = catategories.split(',')
+                    oldblog.categories = categories.split(',')
 
                 }
                 if (tags) {
