@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { CreateBlog } from '../../actions/blog.js'
+import { SingleBlogAPI } from '../../actions/blog.js'
 import { isAuth, getCookie } from '../../actions/auth'
 import Router from 'next/router'
 import dynamic from 'next/dynamic'
@@ -16,10 +16,53 @@ import { quillformats, Quillmodules } from '../../helpers/quill.js'
 
 
 const UpdateBlog = ({ router }) => {
-    const changeHandler = name => e => {
+
+
+    const [body, setBody] = useState('')
+    const [values, setValues] = useState({
+        success: '', error: '', formData: '', title: '',
+    })
+    const { success, error, formData, title, } = values
+
+
+
+
+    useEffect(() => {
+        setValues({ ...values, formData: new FormData() })
+        initBlog()
+    }, [router])
+    const readyBlog = (e) => {
+        e.preventDefault()
+
 
     }
-    const submitHandler = (slug) => {
+    const changeBody = (e) => {
+        setBody(e)
+        formData.set('body', e)
+    }
+    const editBlog = () => {
+
+    }
+
+    const changeHandler = name => e => {
+        var value = name === 'photo' ? e.target.files[0] : e.target.value
+        formData.set(name, value)
+        setValues({ ...values, [name]: value, formData, error: '' })
+    }
+
+    const initBlog = () => {
+        if (router.query.slug) {
+
+            SingleBlogAPI(router.query.slug).then((data) => {
+                if (data.error) {
+                    setValues({ ...values, error: data.error })
+                }
+                else {
+                    setValues({ ...values, title: data.title })
+                    setBody(data.body)
+                }
+            })
+        }
 
     }
 
@@ -31,7 +74,7 @@ const UpdateBlog = ({ router }) => {
                     <input type="text" onChange={changeHandler('title')} value={title} className="form-control" />
                 </div>
                 <div className="form-group">
-                    <ReactQuill modules={Quillmodules} formats={quillformats} placeholder="write something  amazing ..." value={body} onChange={handleBody} />
+                    <ReactQuill modules={Quillmodules} formats={quillformats} value={body} placeholder="write something  amazing ..." />
                 </div>
                 <button className="btn btn-primary">Publish</button>
             </form>
@@ -44,7 +87,7 @@ const UpdateBlog = ({ router }) => {
                     {BlogFrom()}
                 </div>
                 <div className="col-md-4">
-                    show categories
+
                 </div>
             </div>
         </div>
