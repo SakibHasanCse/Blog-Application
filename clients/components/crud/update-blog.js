@@ -19,6 +19,11 @@ const UpdateBlog = ({ router }) => {
 
 
     const [body, setBody] = useState('')
+    const [categories, setCategories] = useState([])
+    const [tags, setTags] = useState([])
+    const [checked, setChecked] = useState([])
+    const [checkedTags, setCheckedTags] = useState([])
+
     const [values, setValues] = useState({
         success: '', error: '', formData: '', title: '',
     })
@@ -30,6 +35,8 @@ const UpdateBlog = ({ router }) => {
     useEffect(() => {
         setValues({ ...values, formData: new FormData() })
         initBlog()
+        initTags()
+        initCategories()
     }, [router])
     const readyBlog = (e) => {
         e.preventDefault()
@@ -49,21 +56,129 @@ const UpdateBlog = ({ router }) => {
         formData.set(name, value)
         setValues({ ...values, [name]: value, formData, error: '' })
     }
+    const initCategories = () => {
+        CategoryList().then((data) => {
+            if (data.error) {
+                setValues({ ...values, error: data.error })
 
+            } else {
+                setCategories(data)
+            }
+        })
+    }
+    const initTags = () => {
+        TagsList().then((data) => {
+            if (data.error) {
+                setValues({ ...values, error: data.error })
+
+            } else {
+                setTags(data)
+            }
+        })
+    }
     const initBlog = () => {
         if (router.query.slug) {
 
             SingleBlogAPI(router.query.slug).then((data) => {
                 if (data.error) {
-                    setValues({ ...values, error: data.error })
+                    setValues({ ...values, error: data.error, success: '' })
                 }
                 else {
                     setValues({ ...values, title: data.title })
                     setBody(data.body)
+                    setCategoriesArray(data.categories)
+                    setTagsArray(data.tags)
                 }
             })
         }
 
+    }
+
+    const setCategoriesArray = (blogCategories) => {
+        var ca = []
+        blogCategories.map((category, i) => (
+            ca.push(category._id)
+        ))
+        setChecked(ca)
+
+    }
+    const setTagsArray = (blogTags) => {
+        var ca = []
+        blogTags.map((t, i) => (
+            ca.push(t._id)
+        ))
+        setCheckedTags(ca)
+
+    }
+    const handleChangeChaked = (e) => () => {
+        setValues({ ...values, error: '' })
+        const CheckedCategory = checked.indexOf(e)
+
+        const all = [...checked]
+        if (CheckedCategory === -1) {
+            all.push(e)
+        } else {
+            all.splice(CheckedCategory, 1)
+        }
+        setChecked(all)
+        formData.set('categories', all)
+
+
+    }
+    const handleChangeCheckedTags = (e) => () => {
+        setValues({ ...values, error: '' })
+        const CheckedTags = checkedTags.indexOf(e)
+        var all = [...checkedTags]
+        if (CheckedTags === -1) {
+            all.push(e)
+
+        } else {
+            all.splice(CheckedTags, 1)
+        }
+
+        formData.set('tags', all)
+    }
+
+    const selectedCategory = (e) => {
+        var result = checked.indexOf(e)
+        if (result !== -1) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+    const selectedTags = (e) => {
+        var result = checkedTags.indexOf(e)
+        if (result !== -1) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    const showCategories = () => {
+        return (
+            categories && categories.map((category, i) => (
+                <li key={i} className="list-unstyled">
+                    <input type="checkbox" checked={selectedCategory(category._id)} onChange={handleChangeChaked(category._id)} className="mr-2" />
+                    <label htmlFor="" className="form-check-label">{category.name}</label>
+
+
+                </li>
+            ))
+        )
+
+    }
+    const showTags = () => {
+        return (
+            tags && tags.map((tag, i) => (
+                <li className="list-unstyled">
+                    <input type="checkbox" checked={selectedTags(tag._id)} onChange={handleChangeCheckedTags(tag._id)} className="mr-2" />
+                    <label htmlFor="" className="form-check-label">{tag.name}</label>
+                </li>
+            ))
+        )
     }
 
     const BlogFrom = () => {
@@ -76,7 +191,7 @@ const UpdateBlog = ({ router }) => {
                 <div className="form-group">
                     <ReactQuill modules={Quillmodules} formats={quillformats} value={body} placeholder="write something  amazing ..." />
                 </div>
-                <button className="btn btn-primary">Publish</button>
+                <button className="btn btn-primary">Update</button>
             </form>
         )
     }
@@ -87,7 +202,30 @@ const UpdateBlog = ({ router }) => {
                     {BlogFrom()}
                 </div>
                 <div className="col-md-4">
+                    <div>
+                        <div className="form-group">
+                            <small>Max size : 1 Mb</small>
+                            <br />
+                            <label className="btn btn-outline-info"> Upload Feature Image
+                            <input type="file" onChange={changeHandler('photo')} accept="image/*" hidden />
+                            </label>
 
+                        </div>
+                        <div>
+                            <h5>Categories</h5>
+                            <ul style={{ maxHeight: '150px', overflowY: 'scroll' }}>
+                                {showCategories()}
+                            </ul>
+                        </div>
+                        <div>
+                            <h5>Tags</h5>
+                            <ul style={{ maxHeight: '150px', overflowY: 'scroll' }} >
+                                {showTags()}
+
+                            </ul>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
