@@ -211,7 +211,7 @@ const UpdateBlog = ({ router }) => {
                     <input type="text" onChange={changeHandler('title')} value={title} className="form-control" />
                 </div>
                 <div className="form-group">
-                    <ReactQuill modules={Quillmodules} formats={quillformats} value={body} placeholder="write something  amazing ..." />
+                    <ReactQuill modules={Quillmodules} formats={quillformats} value={body} placeholder="write something  amazing on your blog..." />
                 </div>
                 <button className="btn btn-primary">Update</button>
             </form>
