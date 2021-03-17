@@ -67,7 +67,11 @@ export const RelateBlogs = (blog) => {
 
 export const searchBLog = (params) => {
     var query = queryString.stringify(params)
-    return fetch(`${API}/blogs/releted`, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(blog) }).then((response) => {
+    console.log('query', query)
+    console.log('params', params)
+    return fetch(`${API}/blogs/search?${query}`, {
+        method: 'GET'
+    }).then((response) => {
         return response.json()
     }).catch(err => console.log(err))
 }

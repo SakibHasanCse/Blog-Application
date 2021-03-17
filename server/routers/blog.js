@@ -12,7 +12,7 @@ router.put('/blog/:slug', requireSignin, authAdminMiddleware, updateBlog);
 router.get('/blog/:slug', singleBlog);
 router.get('/blog/photo/:slug', blogPhoto);
 router.post('/blogs/releted', relatedProducts)
-router.post('/blogs/search', SchearchProducts)
+router.get('/blogs/search', SchearchProducts)
 
 
 

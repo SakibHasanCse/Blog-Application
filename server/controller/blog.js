@@ -358,10 +358,17 @@ exports.SchearchProducts = async(req, res) => {
     }
     const { search } = req.query
     if (search) {
-        await Blog.find({ $or: [{ title: { $regex: search, $options: 'i' } }, { body: { regex: search, options: 'i' } }] })
+        await Blog.find({
+                $or: [{
+                        title: { $regex: search, $options: 'i' }
+                    },
+                    { body: { $regex: search, $options: 'i' } }
+                ]
+            })
             .select('-photo -body')
-            .exec(err, blog => {
+            .exec((err, blog) => {
                 if (err) {
+                    console.log(err)
                     return res.json({ error: errorHandler(err) })
                 } else {
                     console.log(blog)

@@ -19,6 +19,8 @@ import {
     NavbarText
 } from 'reactstrap';
 import { isAuth, signout } from '../actions/auth';
+import Search from './blog/search';
+
 
 Router.onRouteChangeStart = url => Nprogress.start()
 Router.onRouteChangeComplete = url => Nprogress.done()
@@ -29,7 +31,7 @@ const Header = (props) => {
     const toggle = () => setIsOpen(!isOpen);
 
     return (
-        <div>
+        <React.Fragment>
             <Navbar color="light" light expand="md">
                 <Link href='/'><NavbarBrand className="font-weight-bold">{APPNAME}</NavbarBrand></Link>
 
@@ -86,7 +88,8 @@ const Header = (props) => {
 
                 </Collapse>
             </Navbar>
-        </div >
+            <Search />
+        </React.Fragment >
     );
 }
 
