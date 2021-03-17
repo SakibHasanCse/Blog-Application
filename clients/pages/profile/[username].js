@@ -13,6 +13,7 @@ const UserName = ({ profile, blogs }) => {
                                 <div className="card-body">
                                     <h5>profile</h5>
                                     {JSON.stringify(profile)}
+                                    {JSON.stringify(blogs)}
                                 </div>
                             </div>
                         </div>
@@ -26,15 +27,17 @@ const UserName = ({ profile, blogs }) => {
         </React.Fragment>
     )
 }
-UserName.getInitialProps = ({ query }) => {
-    return getUserProfilewithblog(query.username).then((data) => {
-        console.log(data)
+UserName.getInitialProps = async ({ query }) => {
+    return await getUserProfilewithblog(query.username)
+        .then((data) => {
+            console.log('data')
 
-        if (data.error) {
-            console.log(data.error)
-        } else {
-            return { profile: data.user, blogs: data.blogs }
-        }
-    }).catch(err => console.log(err))
+            // if (data.error) {
+            //     console.log(data.error)
+
+            // } else {
+            return { profile: data, blogs: data }
+            // }
+        })
 }
 export default UserName
