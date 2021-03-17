@@ -1,12 +1,13 @@
-
 const express = require('express')
-const { authAdminMiddleware, authUserMiddleware, requireSignin } = require('../controller/auth')
-const { read } = require('../controller/user')
-
+const { Signup, Signin, signout, requireSignin } = require('../controller/auth')
+const { runValidation } = require('../validator')
+const { userSignUpValidator, userSiginValidator } = require('../validator/auth')
 const router = express.Router()
 
-router.get('/profile', requireSignin, authUserMiddleware, read);
+router.post('/signup', userSignUpValidator, runValidation, Signup);
+router.post('/signin', userSiginValidator, runValidation, Signin)
 
+router.get('/signout', signout)
 
 
 module.exports = router
