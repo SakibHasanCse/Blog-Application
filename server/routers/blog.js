@@ -1,7 +1,6 @@
-
 const express = require('express')
 const { authAdminMiddleware, requireSignin } = require('../controller/auth')
-const { createBlog, deleteBlog, relatedProducts, updateBlog, blogPhoto, allBlog, singleBlog, listAllBlogTagsCategories } = require('../controller/blog')
+const { createBlog, deleteBlog, relatedProducts, SchearchProducts, updateBlog, blogPhoto, allBlog, singleBlog, listAllBlogTagsCategories } = require('../controller/blog')
 
 const router = express.Router()
 
@@ -13,6 +12,7 @@ router.put('/blog/:slug', requireSignin, authAdminMiddleware, updateBlog);
 router.get('/blog/:slug', singleBlog);
 router.get('/blog/photo/:slug', blogPhoto);
 router.post('/blogs/releted', relatedProducts)
+router.post('/blogs/search', SchearchProducts)
 
 
 

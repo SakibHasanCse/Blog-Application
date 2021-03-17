@@ -1,8 +1,9 @@
 const Category = require('../models/category')
+const Blog = require('../models/blogs')
 const slugify = require('slugify')
 const { errorHandler } = require('../helpers/dbErrorHandel')
 
-exports.createCategory = async (req, res, next) => {
+exports.createCategory = async(req, res, next) => {
     try {
         const { name } = req.body
         const slug = slugify(name).toLowerCase()
@@ -32,7 +33,7 @@ exports.createCategory = async (req, res, next) => {
     }
 }
 
-exports.list = async (req, res) => {
+exports.list = async(req, res) => {
     try {
         await Category.find(
             (err, data) => {
@@ -51,7 +52,7 @@ exports.list = async (req, res) => {
     }
 }
 
-exports.read = async (req, res) => {
+exports.read = async(req, res) => {
     const slug = req.params.slug
     try {
         await Category.findOne({ slug }, (err, data) => {
@@ -64,10 +65,18 @@ exports.read = async (req, res) => {
                 return res.status(400).json({
                     error: 'Category Not Found'
                 })
-            }
-            return res.status(200)
-                .json(data)
+            } else {
+                Blog.find({ categories: data })
+                    .populate('categories', '_id name slug')
+                    .populate('tags', '_id name slug')
+                    .populate('postedBy', '_id name')
+                    .select('_id title slug excerpt categories tags postedBy createdAt updatedAt')
+                    .exec((err, result) => {
+                        console.log({ category: data, blogs: result })
+                        return res.status(200).json({ category: data, blogs: result })
+                    })
 
+            }
         })
     } catch (error) {
         return res.status(500).json({
@@ -76,7 +85,7 @@ exports.read = async (req, res) => {
     }
 }
 
-exports.deleteCategory = async (req, res) => {
+exports.deleteCategory = async(req, res) => {
     const slug = req.params.slug
     try {
         await Category.findOne({ slug }, (err, category) => {
@@ -97,4 +106,3 @@ exports.deleteCategory = async (req, res) => {
         })
     }
 }
-

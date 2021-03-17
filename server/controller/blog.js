@@ -9,7 +9,7 @@ const { errorHandler } = require('../helpers/dbErrorHandel')
 const fs = require('fs')
 const { smartTrim } = require('../helpers/blog')
 
-exports.createBlog = async (req, res, next) => {
+exports.createBlog = async(req, res, next) => {
     try {
         const form = new formidable.IncomingForm()
         form.keepExtension = true
@@ -84,20 +84,19 @@ exports.createBlog = async (req, res, next) => {
                     })
                 }
 
-                Blog.findByIdAndUpdate(data._id, { $push: { categories: newCategory, tags: newTags } },
-                    { new: true }).exec((err, result) => {
-                        if (err) {
-                            console.log('err' + err)
+                Blog.findByIdAndUpdate(data._id, { $push: { categories: newCategory, tags: newTags } }, { new: true }).exec((err, result) => {
+                    if (err) {
+                        console.log('err' + err)
 
-                            return res.status(400).json({
-                                error: errorHandler(err)
-                            })
-                        } else {
-                            return res.status(201).json(result)
+                        return res.status(400).json({
+                            error: errorHandler(err)
+                        })
+                    } else {
+                        return res.status(201).json(result)
 
-                        }
+                    }
 
-                    })
+                })
 
             })
 
@@ -113,7 +112,7 @@ exports.createBlog = async (req, res, next) => {
 
 // deleteBlog, updateBlog, allBlog, singleBlog, listAllBlogTagsCategories
 
-exports.allBlog = async (req, res) => {
+exports.allBlog = async(req, res) => {
     try {
         await Blog.find()
             .populate('tags', '_id name slug')
@@ -135,7 +134,7 @@ exports.allBlog = async (req, res) => {
 
     }
 }
-exports.deleteBlog = async (req, res) => {
+exports.deleteBlog = async(req, res) => {
     try {
         const slug = req.params.slug.toLowerCase()
         await Blog.findOneAndDelete({ slug: slug }, (err, blog) => {
@@ -150,7 +149,7 @@ exports.deleteBlog = async (req, res) => {
 
     }
 }
-exports.updateBlog = async (req, res) => {
+exports.updateBlog = async(req, res) => {
     try {
         const slug = req.params.slug.toLowerCase()
         await Blog.findOne({ slug: slug }).exec((err, oldblog) => {
@@ -234,7 +233,7 @@ exports.updateBlog = async (req, res) => {
 
     }
 }
-exports.singleBlog = async (req, res) => {
+exports.singleBlog = async(req, res) => {
     try {
         const slug = req.params.slug.toLowerCase()
         await Blog.findOne({ slug: slug })
@@ -257,7 +256,7 @@ exports.singleBlog = async (req, res) => {
 
     }
 }
-exports.listAllBlogTagsCategories = async (req, res) => {
+exports.listAllBlogTagsCategories = async(req, res) => {
     console.log(req.body)
     try {
         let limit = req.body.limit ? parseInt(req.body.limit) : 10
@@ -313,7 +312,7 @@ exports.listAllBlogTagsCategories = async (req, res) => {
 
     }
 }
-exports.blogPhoto = async (req, res) => {
+exports.blogPhoto = async(req, res) => {
     const slug = req.params.slug.toLowerCase()
     await Blog.findOne({ slug }).select('photo').exec((err, data) => {
         if (err || !data) {
@@ -324,7 +323,7 @@ exports.blogPhoto = async (req, res) => {
     })
 }
 
-exports.relatedProducts = async (req, res) => {
+exports.relatedProducts = async(req, res) => {
     try {
         const limit = req.body.limit ? parseInt(req.body.limit) : 3
         const { categories, _id } = req.body.blog
@@ -332,7 +331,7 @@ exports.relatedProducts = async (req, res) => {
         await Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
             .limit(limit)
 
-            .populate('categories', '_id name slug')
+        .populate('categories', '_id name slug')
             .populate('tags', '_id name slug')
             .populate('postedBy', '_id name username')
             .select('_id title slug excerpt categories tags postedBy createdAt updatedAt')
@@ -348,5 +347,26 @@ exports.relatedProducts = async (req, res) => {
 
         return res.status(400).json({ error: 'Internal server error , try again' })
 
+    }
+}
+exports.SchearchProducts = async(req, res) => {
+    try {
+
+    } catch (error) {
+        return res.json({ error: 'Internal server error , try again' })
+
+    }
+    const { search } = req.query
+    if (search) {
+        await Blog.find({ $or: [{ title: { $regex: search, $options: 'i' } }, { body: { regex: search, options: 'i' } }] })
+            .select('-photo -body')
+            .exec(err, blog => {
+                if (err) {
+                    return res.json({ error: errorHandler(err) })
+                } else {
+                    console.log(blog)
+                    return res.json(blog)
+                }
+            })
     }
 }

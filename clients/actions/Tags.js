@@ -1,18 +1,18 @@
 import fetch from 'isomorphic-fetch'
 import { API } from '../config'
 
-export const CreateTags = async (token, tags) => {
+export const CreateTags = async(token, tags) => {
 
 
     return fetch(`${API}/tag`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(tags)
-    })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(tags)
+        })
         .then((response) => {
 
             return response.json()
@@ -20,11 +20,11 @@ export const CreateTags = async (token, tags) => {
         .catch(err => console.log(err))
 }
 
-export const TagsList = async () => {
+export const TagsList = async() => {
 
     return fetch(`${API}/tags`, {
-        method: 'GET',
-    })
+            method: 'GET',
+        })
         .then((response) => {
 
             return response.json()
@@ -33,12 +33,12 @@ export const TagsList = async () => {
 }
 
 
-export const SingleTags = async (slug) => {
+export const SingleTags = async(slug) => {
 
     return fetch(`${API}/tag/${slug}`, {
-        method: 'POST',
+            method: 'GET',
 
-    })
+        })
         .then((response) => {
 
             return response.json()
@@ -48,17 +48,17 @@ export const SingleTags = async (slug) => {
 
 
 
-export const DeleteTags = async (slug, token) => {
+export const DeleteTags = async(slug, token) => {
 
     return fetch(`${API}/tag/${slug}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`
-        }
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            }
 
-    })
+        })
         .then((response) => {
 
             return response.json()

@@ -1,10 +1,9 @@
-
-
 const Tags = require('../models/tags')
+const Blog = require('../models/blogs')
 const slugify = require('slugify')
 const { errorHandler } = require('../helpers/dbErrorHandel')
 
-exports.createTags = async (req, res, next) => {
+exports.createTags = async(req, res, next) => {
     try {
         const { name } = req.body
         const slug = slugify(name).toLowerCase()
@@ -28,7 +27,7 @@ exports.createTags = async (req, res, next) => {
     }
 }
 
-exports.list = async (req, res) => {
+exports.list = async(req, res) => {
     try {
         await Tags.find(
             (err, data) => {
@@ -47,7 +46,7 @@ exports.list = async (req, res) => {
     }
 }
 
-exports.read = async (req, res) => {
+exports.read = async(req, res) => {
     const slug = req.params.slug
     try {
         await Tags.findOne({ slug }, (err, data) => {
@@ -60,9 +59,25 @@ exports.read = async (req, res) => {
                 return res.status(400).json({
                     error: 'Tags Not Found'
                 })
+            } else {
+                Blog.find({ tags: data })
+                    .populate('tags', '_id name slug')
+                    .populate('categories', '_id name slug')
+                    .populate('createdBy', '_id name')
+                    .select('_id title  slug excerpt categories tags postedBy createdAt updatedAt')
+                    .exec((err, result) => {
+                        if (err) {
+                            return res.status(400).json({
+                                error: errorHandler(err)
+                            })
+                        } else {
+                            return res.status(200).json({ tags: data, blogs: result })
+                        }
+
+                    })
+
             }
-            return res.status(200)
-                .json(data)
+
 
         })
     } catch (error) {
@@ -72,7 +87,7 @@ exports.read = async (req, res) => {
     }
 }
 
-exports.deleteTags = async (req, res) => {
+exports.deleteTags = async(req, res) => {
     const slug = req.params.slug
     try {
         await Tags.findOne({ slug }, (err, Tags) => {

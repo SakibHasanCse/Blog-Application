@@ -7,7 +7,7 @@ import renderHTML from 'react-render-html';
 const BLogCart = ({ blog }) => {
     const ShowCategory = (blog) => {
         return blog.categories.map((category, i) => (
-            <Link href={`/catagory/${category.slug}`}>
+            <Link href={`/category/${category.slug}`}>
                 <a className="btn btn-primary ml-1 mr-1 mt-3"> {category.name}</a>
             </Link>
 

@@ -1,16 +1,16 @@
 import fetch from 'isomorphic-fetch'
 import { API } from '../config'
-
-export const CreateBlog = async (token, blog) => {
+import queryString from 'query-string'
+export const CreateBlog = async(token, blog) => {
     return fetch(`${API}/blog`, {
-        method: 'POST',
-        headers: {
+            method: 'POST',
+            headers: {
 
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-        body: blog
-    })
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: blog
+        })
         .then((response) => {
 
             return response.json()
@@ -18,7 +18,7 @@ export const CreateBlog = async (token, blog) => {
         .catch(err => console.log(err))
 }
 
-export const UpdateBlogAPI = async (token, data, slug) => {
+export const UpdateBlogAPI = async(token, data, slug) => {
     return fetch(`${API}/blog/${slug}`, {
         method: 'PUT',
         headers: {
@@ -33,19 +33,19 @@ export const UpdateBlogAPI = async (token, data, slug) => {
     }).catch(err => console.log(err))
 }
 
-export const ListBlogwithCategoryAndTags = async (skip, limit) => {
+export const ListBlogwithCategoryAndTags = async(skip, limit) => {
     const data = { skip: skip, limit: limit }
     return fetch(`${API}/blogs-categories-tags`, {
-        method: 'POST',
-        headers: {
+            method: 'POST',
+            headers: {
 
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
 
-        },
-        body: JSON.stringify(data)
+            },
+            body: JSON.stringify(data)
 
-    })
+        })
         .then((response) => {
 
             return response.json()
@@ -65,8 +65,13 @@ export const RelateBlogs = (blog) => {
     }).catch(err => console.log(err))
 }
 
-
-export const allListAPI = async () => {
+export const searchBLog = (params) => {
+    var query = queryString.stringify(params)
+    return fetch(`${API}/blogs/releted`, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(blog) }).then((response) => {
+        return response.json()
+    }).catch(err => console.log(err))
+}
+export const allListAPI = async() => {
     return fetch(`${API}/blogs`, { method: 'GET' })
         .then((response) => {
 
@@ -76,15 +81,15 @@ export const allListAPI = async () => {
         })
 }
 
-export const deleteBlog = async (slug, token) => {
+export const deleteBlog = async(slug, token) => {
     return fetch(`${API}/blog/${slug}`, {
-        method: 'DELETE',
-        headers: {
+            method: 'DELETE',
+            headers: {
 
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`
-        }
-    })
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        })
         .then((response) => {
 
             return response.json()
@@ -92,4 +97,3 @@ export const deleteBlog = async (slug, token) => {
             console.log(err)
         })
 }
-
