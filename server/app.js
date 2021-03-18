@@ -5,6 +5,8 @@ const cors = require('cors')
 const morgan = require('morgan')
 const dotenv = require('dotenv')
 const cookieparser = require('cookie-parser')
+const fs = require('fs')
+const path = require('path')
 const { databaseConnection } = require('./config/db')
 
 
@@ -27,11 +29,25 @@ const TagsRouter = require('./routers/tags')
 const BlogRouter = require('./routers/blog')
 
 
-app.use('/api', userRouter)
-app.use('/api', authRouter)
-app.use('/api', categoryRouter)
-app.use('/api', TagsRouter)
-app.use('/api', BlogRouter)
+// var hello = authRouter.Layer.filter(d => d)
+// console.log(hello)
+
+// fs.readFile('./routers').map((router) => {
+//     console.log(router)
+//         // app.use('/api', require(`./routers/${router}`))
+
+// })
+
+const routers = fs.readdirSync(path.join(__dirname, 'routers'))
+routers.forEach(router => {
+    app.use(`/api`, require(`./routers/${router}`))
+})
+
+// app.use('/api', userRouter)
+// app.use('/api', authRouter)
+// app.use('/api', categoryRouter)
+// app.use('/api', TagsRouter)
+// app.use('/api', BlogRouter)
 
 const port = process.env.PORT || 8000
 app.listen(port, () => {
