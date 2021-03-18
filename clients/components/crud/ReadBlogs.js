@@ -65,7 +65,10 @@ const ReadAllBlog = () => {
         return blogs && blogs.map((blog, i) => (
             <div key={i} className="pb-5 ">
                 <h3 >{blog.title}</h3>
-                <p className="mark">Written by {blog.postedBy.name} | Published on {moment(blog.updatedAt).fromNow()}</p>
+                <p className="mark">Written by <Link href={`/profile/${blog.postedBy.username}`}>
+                    <a>{blog.postedBy.name}</a>
+
+                </Link> | Published on {moment(blog.updatedAt).fromNow()}</p>
                 <button className="btn btn-sm btn-danger " onClick={() => DeleteBlog(blog.slug)}>Delete</button>
                 {UpdateBlog(blog.slug)}
 

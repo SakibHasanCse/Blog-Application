@@ -94,7 +94,10 @@ const SingleBlog = ({ blog, router }) => {
 
 
                                     <div className="lead mt-3 mark">
-                                        Written by {blog.postedBy.name} | Publish {moment(blog.createdAt, "YYYYMMDD").fromNow()}
+                                        Written by <Link href={`/profile/${blog.postedBy.username}`}>
+                                            <a>{blog.postedBy.name}</a>
+
+                                        </Link> | Publish {moment(blog.createdAt, "YYYYMMDD").fromNow()}
 
                                     </div>
 

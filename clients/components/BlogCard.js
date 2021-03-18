@@ -30,11 +30,10 @@ const BLogCart = ({ blog }) => {
             </header>
             <section>
                 <p className="mark ml-1 pt-2 pb-2">
-                    Written by
-                    <Link href={`/profile/${blog.postedBy.name}`}>
-                        {blog.postedBy.name}
-                    </Link>
-                      | Publish {moment(blog.createdAt, "YYYYMMDD").fromNow()}
+                    Written by <Link href={`/profile/${blog.postedBy.username}`}>
+                        <a>{blog.postedBy.name}</a>
+
+                    </Link> | Publish {moment(blog.createdAt, "YYYYMMDD").fromNow()}
                 </p>
 
             </section>

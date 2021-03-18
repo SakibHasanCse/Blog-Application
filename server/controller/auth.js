@@ -1,12 +1,11 @@
-
 const User = require('../models/user')
 const shortid = require('shortid')
 const jwt = require('jsonwebtoken')
-const expressJTW = require('express-jwt')
+var expressJTW = require('express-jwt')
 
 
 
-exports.Signup = async (req, res, next) => {
+exports.Signup = async(req, res, next) => {
 
     try {
         await User.findOne({ "email": req.body.email }).exec((err, user) => {
@@ -43,7 +42,7 @@ exports.Signup = async (req, res, next) => {
     }
 }
 
-exports.Signin = async (req, res, next) => {
+exports.Signin = async(req, res, next) => {
     const { password, email } = req.body
     console.log(password)
     await User.findOne({ "email": email }, (err, user) => {
@@ -61,8 +60,8 @@ exports.Signin = async (req, res, next) => {
         const { _id, email, name, username, role } = user
 
         return res.status(200).json({
-            user: { _id, email, name, username, role }
-            , token
+            user: { _id, email, name, username, role },
+            token
         })
     })
 
@@ -76,7 +75,7 @@ exports.signout = (req, res) => {
     })
 }
 
-exports.authUserMiddleware = async (req, res, next) => {
+exports.authUserMiddleware = async(req, res, next) => {
     const userID = req.user._id
     await await User.findOne({ _id: userID }, (err, user) => {
         if (err || !user) {
@@ -91,7 +90,7 @@ exports.authUserMiddleware = async (req, res, next) => {
 
 }
 
-exports.authAdminMiddleware = async (req, res, next) => {
+exports.authAdminMiddleware = async(req, res, next) => {
     const adminID = req.user._id
     await await User.findOne({ _id: adminID }, (err, user) => {
         if (err || !user) {
@@ -111,6 +110,8 @@ exports.authAdminMiddleware = async (req, res, next) => {
 
 }
 
-exports.requireSignin = expressJTW({ secret: process.env.JWT_TOKEN, algorithms: ['HS256'] }), (err, req, res, next) => {
-    console.log(err)
-}
+exports.requireSignin =
+    expressJTW({ secret: process.env.JWT_TOKEN, algorithms: ['HS256'] }),
+    (err, req, res, next) => {
+        console.log(err)
+    }

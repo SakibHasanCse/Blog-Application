@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken')
 const expressJTW = require('express-jwt')
 const Blog = require('../models/blogs')
 const { errorHandler } = require('../helpers/dbErrorHandel')
+const _ = require('lodash')
+const formidable = require('formidable')
+const fs = require('fs')
 
 exports.read = (req, res) => {
     req.profile.hash_password = undefined;
@@ -16,7 +19,7 @@ exports.userwithBlogs = async(req, res) => {
         let user;
         console.log(username)
         await User.findOne({ username: username })
-            .select('_id name  username').exec((err, userData) => {
+            .select('_id name  username profile createdAt').exec((err, userData) => {
                 if (err || !userData) {
                     console.log(err)
                     return res.json({ error: 'User not found' })
@@ -52,4 +55,64 @@ exports.userwithBlogs = async(req, res) => {
 
 
     }
+}
+
+exports.userPhoto = async() => {
+    try {
+        const username = req.params.username
+        await User.findOne({ username: username }).exec((err, user) => {
+            if (err || !user) {
+                return res.status(400).json({
+                    error: 'User not found'
+                })
+            }
+            if (user.photo.data) {
+                res.set('Content-Type', user.photo.contentType)
+                return res.send(user.photo.data)
+
+            } else {
+                return res.status(400).json({
+                    error: 'Somthing went wrong'
+                })
+            }
+        })
+    } catch (error) {
+        return res.status(400).json({
+            error: errorHandler(err)
+        })
+
+    }
+
+
+}
+exports.updateUsers = (req, res) => {
+    const form = new formidable.IncomingForm()
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            return res.status(400).json({
+                error: 'Photo could not be uploaded'
+            })
+        }
+        let user = req.profile
+        user = _extend(user, fields)
+        if (files.photo) {
+            if (files.photo.size > 100000) {
+                return res.status(400).json({
+                    error: 'Photo size must be less than 1mb'
+                })
+            }
+
+            user.photo.data = fs.file(files.photo.path)
+            user.photo.contentType = files.photo.type
+            user.save().then((data) => {
+                user.hash_password = undefined
+                return res.status(200).json(user)
+
+            }).catch(err => {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                })
+            })
+        }
+    })
 }
