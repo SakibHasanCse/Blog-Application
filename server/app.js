@@ -29,14 +29,7 @@ const TagsRouter = require('./routers/tags')
 const BlogRouter = require('./routers/blog')
 
 
-// var hello = authRouter.Layer.filter(d => d)
-// console.log(hello)
 
-// fs.readFile('./routers').map((router) => {
-//     console.log(router)
-//         // app.use('/api', require(`./routers/${router}`))
-
-// })
 
 const routers = fs.readdirSync(path.join(__dirname, 'routers'))
 routers.forEach(router => {
