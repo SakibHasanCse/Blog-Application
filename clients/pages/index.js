@@ -1,17 +1,11 @@
 import Layout from "../components/Layout"
 import Link from 'next/Link'
+import React from 'react'
 
 
 const Index = () => {
     return (
-        <Layout>
-
-            <div className="container">
-                <h4 className="text-center p-5">Welcome To Our Blog</h4>
-            </div>
-
-
-        </Layout>
+        <h2>header</h2>
     )
 }
 
