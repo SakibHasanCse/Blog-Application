@@ -87,13 +87,17 @@ exports.userPhoto = async() => {
 }
 exports.updateUsers = (req, res) => {
     const form = new formidable.IncomingForm()
+    form.keepExtension = true
     form.parse(req, (err, fields, files) => {
+        console.log(fields)
         if (err) {
             return res.status(400).json({
                 error: 'Photo could not be uploaded'
             })
         }
         let user = req.profile
+
+
         user = _extend(user, fields)
         if (files.photo) {
             if (files.photo.size > 100000) {
