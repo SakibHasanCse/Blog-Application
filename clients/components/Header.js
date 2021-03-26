@@ -80,11 +80,15 @@ const Header = (props) => {
                     {isAuth() && (
 
 
-                        <NavbarText style={{ cursor: 'pointer' }} onClick={() => signout(() => Router.replace('/signin'))} className="pl-2">Signout</NavbarText>
+                        <NavbarText style={{ cursor: 'pointer' }} className="pl-2" onClick={() => signout(() => Router.replace('/signin'))} className="pl-2">Signout</NavbarText>
 
 
                     )}
 
+
+                    <Link href="/user/crud/create">
+                        <NavbarText style={{ cursor: 'pointer' }} className="pl-2 btn btn-sm btn-primary text-light ">Write a blog</NavbarText>
+                    </Link>
 
                 </Collapse>
             </Navbar>

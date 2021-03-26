@@ -5,7 +5,11 @@ import Router from 'next/router'
 
 const UserAuth = ({ children }) => {
     useEffect(() => {
+
         if (!isAuth) {
+            Router.push('/signin')
+        }
+        if (isAuth().role !== 0) {
             Router.push('/signin')
         }
     }, [])

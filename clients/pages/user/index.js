@@ -15,7 +15,7 @@ const Index = () => {
                             <ul className="list-group">
 
                                 <li className="list-group-item">
-                                    <Link href="/user/crud/blog">
+                                    <Link href="/user/crud/create">
                                         <a>Create Blogs </a>
                                     </Link>
                                 </li>
@@ -29,9 +29,8 @@ const Index = () => {
                                     <Link href="/user/profile">
                                         <a>Profile</a>
                                     </Link>
-
                                 </li>
-                                
+
                             </ul>
                         </div>
                         <div className="col-md-8">

@@ -31,7 +31,7 @@ exports.userwithBlogs = async(req, res) => {
                 Blog.find({ postedBy: userId })
                     .populate('tags', '_id name slug')
                     .populate('categories', '_id name slug')
-                    .populate('postedBy', '_id name')
+                    .populate('postedBy', '_id name username')
                     .limit(10)
                     .select('_id title  slug excerpt categories tags postedBy createdAt updatedAt')
                     .exec((err, blogData) => {
@@ -119,6 +119,11 @@ exports.updateUsers = (req, res) => {
             user.save()
                 .then((data) => {
                     user.hash_password = undefined
+                    user.photo = undefined
+                    user.salt = undefined
+                    user.updatedAt = undefined
+                    user.createdAt = undefined
+
                     return res.status(200).json(user)
 
                 }).catch(err => {
