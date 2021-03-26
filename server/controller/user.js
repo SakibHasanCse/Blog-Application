@@ -104,7 +104,10 @@ exports.updateUsers = (req, res) => {
 
             user.photo.data = fs.file(files.photo.path)
             user.photo.contentType = files.photo.type
-            user.save().then((data) => {
+
+        }
+        user.save()
+            .then((data) => {
                 user.hash_password = undefined
                 return res.status(200).json(user)
 
@@ -113,6 +116,5 @@ exports.updateUsers = (req, res) => {
                     error: errorHandler(err)
                 })
             })
-        }
     })
 }

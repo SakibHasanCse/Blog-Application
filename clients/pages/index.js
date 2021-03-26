@@ -5,7 +5,13 @@ import React from 'react'
 
 const Index = () => {
     return (
-        <h2>header</h2>
+        <Layout>
+            <div className="container">
+
+
+                <h2>header</h2>
+            </div>
+        </Layout>
     )
 }
 
