@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Layout from '../../components/Layout'
 import { getUserProfile, updateUserProfile } from '../../actions/user'
 import { getCookie } from '../../actions/auth'
+import {API} from '../../config'
 const Profile = () => {
     const [values, setValues] = useState({
         name: '',
@@ -44,22 +45,22 @@ const Profile = () => {
     }, [])
 
 
-    console.log(dataForm)
     const handleChange = name => e => {
         const value = name === 'photo' ? e.target.files[0] : e.target.value
+
         let userdataForm = new FormData()
         userdataForm.set(name, value)
-
         setValues({ ...values, [name]: value, dataForm: userdataForm, error: '', success: '', })
 
     }
+
     const HandleSubmit = (e) => {
         e.preventDefault()
         setValues({ ...values, loading: true })
-        console.log(dataForm)
         updateUserProfile(token, dataForm)
 
             .then(response => {
+
                 if (response.error) {
                     setValues({ ...values, loading: false, error: response.error, success: '' })
                 } else {
@@ -78,6 +79,15 @@ const Profile = () => {
             })
 
 
+    }
+    const showError = () => {
+        return (<div className="alert alert-danger" style={{ display: error ? "" : 'none' }}>{error}</div>)
+    }
+    const showMessage = () => {
+        return (<div className="alert alert-danger" style={{ display: success ? "" : 'none' }}>{success}</div>)
+    }
+    const showLoading = () => {
+        return (<div className="alert alert-danger" style={{ display: loading ? "" : 'none' }}>Loading...</div>)
     }
     const showForm = () => {
         return (
@@ -125,10 +135,15 @@ const Profile = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-4">
-                            Profile
+                            <img src={`${API}/user/photo/${username}`} className="img img-fluid img-thumbnail mb-3" style={{ maxHeight: 'auto', maxWidth: '100%' }} alt="User Profile" />
 
                         </div>
                         <div className="col-md-8">
+                            <div className="pt-2 pb-2">
+                                {showLoading()}
+                                {showMessage()}
+                                {showError()}
+                            </div>
                             {showForm()}
                         </div>
                     </div>

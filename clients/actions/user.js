@@ -21,15 +21,15 @@ export const getUserProfile = (token) => {
         console.log(err)
     })
 }
-export const updateUserProfile = (token, form) => {
+export const updateUserProfile = (token, formData) => {
     return fetch(`${API}/user/profile `, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
+
                 Authorization: `Bearer ${token}`
             },
-            body: form
+            body: formData
 
         })
         .then((response) => {

@@ -2,16 +2,16 @@ import fetch from 'isomorphic-fetch'
 import { API } from '../config'
 import cookie from 'js-cookie'
 
-export const SignupAPI = async (user) => {
+export const SignupAPI = async(user) => {
     console.log(JSON.stringify(user))
     return fetch(`${API}/signup`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-        },
-        body: JSON.stringify(user)
-    })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
         .then((response) => {
             console.log(response)
             return response.json()
@@ -19,16 +19,16 @@ export const SignupAPI = async (user) => {
         .catch(err => console.log(err))
 }
 
-export const SigninAPI = async (user) => {
+export const SigninAPI = async(user) => {
     console.log(JSON.stringify(user))
     return fetch(`${API}/signin`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-        },
-        body: JSON.stringify(user)
-    })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
         .then((response) => {
             console.log(response)
             return response.json()
@@ -46,8 +46,6 @@ export const signout = (next) => {
     next()
     return fetch(`$(API)/signout`, { Method: 'GET' })
         .then((response) => { console.log(response) }).catch(err => console.log(err))
-
-
 }
 
 
@@ -104,4 +102,3 @@ export const isAuth = () => {
         }
     }
 }
-
