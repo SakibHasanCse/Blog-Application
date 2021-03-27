@@ -1,7 +1,8 @@
 import fetch from 'isomorphic-fetch'
 import { API } from '../config'
 import queryString from 'query-string'
-import { isAuth } from './auth'
+import { isAuth, HandlesAuthToken } from './auth'
+
 export const CreateBlog = async(token, blog) => {
     let blogEndPoint;
 
@@ -22,6 +23,7 @@ export const CreateBlog = async(token, blog) => {
             body: blog
         })
         .then((response) => {
+            HandlesAuthToken(response)
 
             return response.json()
         })
@@ -48,6 +50,8 @@ export const UpdateBlogAPI = async(token, data, slug) => {
         body: data,
 
     }).then((response) => {
+        HandlesAuthToken(response)
+
         return response.json()
     }).catch(err => console.log(err))
 }
@@ -67,18 +71,21 @@ export const ListBlogwithCategoryAndTags = async(skip, limit) => {
         })
         .then((response) => {
 
+
             return response.json()
         })
         .catch(err => console.log(err))
 }
 export const SingleBlogAPI = (slug) => {
     return fetch(`${API}/blog/${slug}`, { method: 'GET' }).then((response) => {
+
         return response.json()
     }).catch(err => console.log(err))
 }
 
 export const RelateBlogs = (blog) => {
     return fetch(`${API}/blogs/releted`, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(blog) }).then((response) => {
+
         return response.json()
     }).catch(err => console.log(err))
 }
@@ -90,6 +97,7 @@ export const searchBLog = (params) => {
     return fetch(`${API}/blogs/search?${query}`, {
         method: 'GET'
     }).then((response) => {
+
         return response.json()
     }).catch(err => console.log(err))
 }
@@ -103,6 +111,7 @@ export const allListAPI = async(username) => {
     return fetch(`${ApiEndpoint}`, { method: 'GET' })
         .then((response) => {
 
+            HandlesAuthToken(response)
             return response.json()
         }).catch(err => {
             console.log(err)
@@ -130,6 +139,7 @@ export const deleteBlog = async(slug, token) => {
         })
         .then((response) => {
 
+            HandlesAuthToken(response)
             return response.json()
         }).catch(err => {
             console.log(err)

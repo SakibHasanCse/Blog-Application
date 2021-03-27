@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import { API } from '../config'
+import { HandlesAuthToken } from './auth'
 
 export const CreateCategory = async(token, Category) => {
 
@@ -14,7 +15,7 @@ export const CreateCategory = async(token, Category) => {
             body: JSON.stringify(Category)
         })
         .then((response) => {
-
+            HandlesAuthToken(response)
             return response.json()
         })
         .catch(err => console.log(err))
@@ -60,7 +61,7 @@ export const DeleteCategory = async(slug, token) => {
 
         })
         .then((response) => {
-
+            HandlesAuthToken(response)
             return response.json()
         })
         .catch(err => console.log(err))

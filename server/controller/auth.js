@@ -55,8 +55,8 @@ exports.Signin = async(req, res, next) => {
             return res.status(400).json({ error: 'Email and password are not match' })
         }
 
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN, { expiresIn: '1d' })
-        res.cookie("token", token, { expiresIn: '1d' })
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN, { expiresIn: '1m' })
+        res.cookie("token", token, { expiresIn: '1m' })
 
         const { _id, email, name, username, role } = user
 

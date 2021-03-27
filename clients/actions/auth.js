@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch'
 import { API } from '../config'
 import cookie from 'js-cookie'
+import Router from 'next/router'
 
 export const SignupAPI = async(user) => {
     console.log(JSON.stringify(user))
@@ -44,7 +45,7 @@ export const signout = (next) => {
     removeCookie('token')
     removeLocalStorage('user')
     next()
-    return fetch(`$(API)/signout`, { Method: 'GET' })
+    return fetch(`${API}/signout`, { Method: 'GET' })
         .then((response) => { console.log(response) }).catch(err => console.log(err))
 }
 
@@ -111,5 +112,19 @@ export const UpdateUser = (user, next) => {
             localStorage.setItem('user', JSON.stringify(auth))
             next()
         }
+    }
+}
+
+export const HandlesAuthToken = (response) => {
+    if (response.status == 401) {
+        signout(() => {
+            Router.push({
+                pathname: '/signin',
+                query: {
+                    message: 'Your Session is Expired , Please sign in again'
+                }
+            })
+        })
+
     }
 }
