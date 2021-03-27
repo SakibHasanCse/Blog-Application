@@ -384,9 +384,11 @@ exports.UsersBlogs = async(req, res) => {
         User.findOne({ username: username })
             .exec((err, user) => {
                 if (err) {
+                    console.log(err)
                     return res.json({ error: errorHandler(err) })
                 }
-                Blog.find({ postedBy: user.username })
+                console.log(user)
+                Blog.find({ postedBy: user._id })
                     .populate('tags', '_id name slug')
                     .populate('categories', '_id name slug')
                     .populate('postedBy', 'name _id username ')
@@ -395,11 +397,14 @@ exports.UsersBlogs = async(req, res) => {
                         if (err) {
                             return res.json({ error: errorHandler(err) })
                         }
+                        console.log(blog)
                         return res.status(200).json(blog)
                     })
 
             })
     } catch (err) {
+        console.log(err)
+
         return res.json({ error: errorHandler(err) })
     }
 }

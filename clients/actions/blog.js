@@ -29,7 +29,16 @@ export const CreateBlog = async(token, blog) => {
 }
 
 export const UpdateBlogAPI = async(token, data, slug) => {
-    return fetch(`${API}/blog/${slug}`, {
+    let blogEndPoint;
+
+    if (isAuth() && isAuth().role === 1) {
+        blogEndPoint = `${API}/blog/${slug}`
+
+    } else if (isAuth() && isAuth().role === 0) {
+        blogEndPoint = `${API}/user/blog/${slug}`
+
+    }
+    return fetch(`${blogEndPoint}`, {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
@@ -84,8 +93,14 @@ export const searchBLog = (params) => {
         return response.json()
     }).catch(err => console.log(err))
 }
-export const allListAPI = async() => {
-    return fetch(`${API}/blogs`, { method: 'GET' })
+export const allListAPI = async(username) => {
+    var ApiEndpoint;
+    if (username) {
+        ApiEndpoint = `${API}/${username}/blogs`
+    } else {
+        ApiEndpoint = `${API}/blogs`
+    }
+    return fetch(`${ApiEndpoint}`, { method: 'GET' })
         .then((response) => {
 
             return response.json()
@@ -95,7 +110,17 @@ export const allListAPI = async() => {
 }
 
 export const deleteBlog = async(slug, token) => {
-    return fetch(`${API}/blog/${slug}`, {
+    let blogEndPoint;
+
+    if (isAuth() && isAuth().role === 1) {
+        blogEndPoint = `${API}/blog/${slug}`
+
+    } else if (isAuth() && isAuth().role === 0) {
+        blogEndPoint = `${API}/user/blog/${slug}`
+
+    }
+
+    return fetch(`${blogEndPoint}`, {
             method: 'DELETE',
             headers: {
 

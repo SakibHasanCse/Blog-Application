@@ -18,7 +18,7 @@ router.get('/blogs/search', SchearchProducts)
 
 
 router.post('/user/blog', requireSignin, authUserMiddleware, createBlog);
-router.get('/:username/blogs', requireSignin, authUserMiddleware, UsersBlogs);
+router.get('/:username/blogs', UsersBlogs);
 router.delete('/user/blog/:slug', requireSignin, authUserMiddleware, doUpdateAndDelete, deleteBlog);
 router.put('/user/blog/:slug', requireSignin, authUserMiddleware, doUpdateAndDelete, updateBlog);
 

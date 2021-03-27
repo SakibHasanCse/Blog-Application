@@ -5,7 +5,7 @@ import { getCookie, isAuth } from '../../actions/auth'
 import Link from 'next/link'
 
 
-const ReadAllBlog = () => {
+const ReadAllBlog = ({ username }) => {
     const [blogs, setBlog] = useState([])
     const [message, setMessage] = useState({})
     const token = getCookie('token')
@@ -15,8 +15,8 @@ const ReadAllBlog = () => {
     }, [])
 
     const loadProducts = () => {
-        allListAPI().then((data) => {
-            console.log(data)
+        allListAPI(username).then((data) => {
+
             if (data.error) {
                 console.log(data.error)
             } else {
@@ -48,7 +48,6 @@ const ReadAllBlog = () => {
             return (
                 <Link href={`/user/crud/${slug}`}>
                     <a className="btn btn-info btn-sm" >Update</a>
-
                 </Link>
             )
         } else if (isAuth() && isAuth().role === 1) {
@@ -69,7 +68,7 @@ const ReadAllBlog = () => {
                     <a>{blog.postedBy.name}</a>
 
                 </Link> | Published on {moment(blog.updatedAt).fromNow()}</p>
-                <button className="btn btn-sm btn-danger " onClick={() => DeleteBlog(blog.slug)}>Delete</button>
+                <button className="btn btn-sm btn-danger mr-2" onClick={() => DeleteBlog(blog.slug)}>Delete</button>
                 {UpdateBlog(blog.slug)}
 
                 <hr />
