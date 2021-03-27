@@ -1,6 +1,6 @@
 const express = require('express')
-const { authAdminMiddleware, requireSignin } = require('../controller/auth')
-const { createBlog, deleteBlog, relatedProducts, SchearchProducts, updateBlog, blogPhoto, allBlog, singleBlog, listAllBlogTagsCategories } = require('../controller/blog')
+const { authAdminMiddleware, doUpdateAndDelete, authUserMiddleware, requireSignin } = require('../controller/auth')
+const { createBlog, deleteBlog, relatedProducts, UsersBlogs, SchearchProducts, updateBlog, blogPhoto, allBlog, singleBlog, listAllBlogTagsCategories } = require('../controller/blog')
 
 const router = express.Router()
 
@@ -14,6 +14,13 @@ router.get('/blog/photo/:slug', blogPhoto);
 router.post('/blogs/releted', relatedProducts)
 router.get('/blogs/search', SchearchProducts)
 
+///user blog posts
+
+
+router.post('/user/blog', requireSignin, authUserMiddleware, createBlog);
+router.get('/:username/blogs', requireSignin, authUserMiddleware, UsersBlogs);
+router.delete('/user/blog/:slug', requireSignin, authUserMiddleware, doUpdateAndDelete, deleteBlog);
+router.put('/user/blog/:slug', requireSignin, authUserMiddleware, doUpdateAndDelete, updateBlog);
 
 
 module.exports = router

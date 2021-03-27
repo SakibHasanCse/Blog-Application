@@ -29,8 +29,8 @@ exports.createTags = async(req, res, next) => {
 
 exports.list = async(req, res) => {
     try {
-        await Tags.find(
-            (err, data) => {
+        await Tags.find()
+            .exec((err, data) => {
                 if (err) {
                     return res.status(400).json({
                         error: 'Tags Not Found'

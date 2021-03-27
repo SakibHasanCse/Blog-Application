@@ -1,8 +1,18 @@
 import fetch from 'isomorphic-fetch'
 import { API } from '../config'
 import queryString from 'query-string'
+import { isAuth } from './auth'
 export const CreateBlog = async(token, blog) => {
-    return fetch(`${API}/blog`, {
+    let blogEndPoint;
+
+    if (isAuth() && isAuth().role === 1) {
+        blogEndPoint = `${API}/blog`
+
+    } else if (isAuth() && isAuth().role === 0) {
+        blogEndPoint = `${API}/user/blog`
+
+    }
+    return fetch(`${blogEndPoint}`, {
             method: 'POST',
             headers: {
 
@@ -56,7 +66,6 @@ export const SingleBlogAPI = (slug) => {
     return fetch(`${API}/blog/${slug}`, { method: 'GET' }).then((response) => {
         return response.json()
     }).catch(err => console.log(err))
-
 }
 
 export const RelateBlogs = (blog) => {

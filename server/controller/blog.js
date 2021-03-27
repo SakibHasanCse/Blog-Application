@@ -1,11 +1,11 @@
 const Blog = require('../models/blogs')
+const { errorHandler } = require('../helpers/dbErrorHandel')
 const Category = require('../models/category')
 const Tags = require('../models/tags')
 const formidable = require('formidable')
 const _ = require('lodash')
 const slugify = require('slugify')
 const { stripHtml } = require('string-strip-html')
-const { errorHandler } = require('../helpers/dbErrorHandel')
 const fs = require('fs')
 const { smartTrim } = require('../helpers/blog')
 
@@ -375,5 +375,31 @@ exports.SchearchProducts = async(req, res) => {
                     return res.json(blog)
                 }
             })
+    }
+}
+
+exports.UsersBlogs = async(req, res) => {
+    try {
+        const username = req.params.username
+        User.findOne({ username: username })
+            .exec((err, user) => {
+                if (err) {
+                    return res.json({ error: errorHandler(err) })
+                }
+                Blog.find({ postedBy: user.username })
+                    .populate('tags', '_id name slug')
+                    .populate('categories', '_id name slug')
+                    .populate('postedBy', 'name _id username ')
+                    .select('_id title  slug excerpt categories tags postedBy createdAt updatedAt')
+                    .exec((err, blog) => {
+                        if (err) {
+                            return res.json({ error: errorHandler(err) })
+                        }
+                        return res.status(200).json(blog)
+                    })
+
+            })
+    } catch (err) {
+        return res.json({ error: errorHandler(err) })
     }
 }

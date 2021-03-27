@@ -3,7 +3,8 @@ const shortid = require('shortid')
 const jwt = require('jsonwebtoken')
 var expressJTW = require('express-jwt')
 
-
+const Blog = require('../models/blogs')
+const { errorHandler } = require('../helpers/dbErrorHandel')
 
 exports.Signup = async(req, res, next) => {
 
@@ -107,11 +108,50 @@ exports.authAdminMiddleware = async(req, res, next) => {
         next()
 
     })
-
 }
+
+exports.authUserMiddleware = async(req, res, next) => {
+    const UserID = req.user._id
+    await await User.findOne({ _id: UserID }, (err, user) => {
+        if (err || !user) {
+            return res.status(404).json({
+                error: 'User not found'
+            })
+        }
+        if (user.role !== 0) {
+            return res.status(400).json({
+                error: 'User Access denied'
+            })
+        }
+        req.profile = user
+        next()
+
+    })
+}
+
 
 exports.requireSignin =
     expressJTW({ secret: process.env.JWT_TOKEN, algorithms: ['HS256'] }),
     (err, req, res, next) => {
         console.log(err)
     }
+
+
+exports.doUpdateAndDelete = (req, res, next) => {
+    const slug = req.params.slug
+    Blog.findOne({ slug: slug }).exec((err, blog) => {
+        if (err || !blog) {
+            res.status(200).json({
+                error: errorHandler(err)
+            })
+        }
+        const authorized = blog.postedBy._id.toString() === req.profile._id.toString()
+        if (authorized) {
+            next()
+        } else {
+            res.json({
+                error: 'Unauthorized User'
+            })
+        }
+    })
+}

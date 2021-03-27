@@ -11,7 +11,7 @@ const SmallCard = ({ blog }) => {
 
 
         <div className="card">
-            <img alt={blog.title} className="card-img-top" src={`${API}/blog/photo/${blog.slug}`} />
+            <img alt={blog.title} className="card-img-top" style={{ height: '250px', width: '100%' }} src={`${API}/blog/photo/${blog.slug}`} />
             <div className="card-body">
                 <h5 className="card-title">{blog.title}</h5>
 

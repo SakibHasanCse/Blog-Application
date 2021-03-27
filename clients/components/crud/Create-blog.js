@@ -4,8 +4,8 @@ import { isAuth, getCookie } from '../../actions/auth'
 import Router from 'next/router'
 import dynamic from 'next/dynamic'
 import { withRouter } from 'next/router'
-import { CategoryList } from '../../actions/category'
-import { TagsList } from '../../actions/tags'
+import { CategoryList } from '../../actions/category.js'
+import { TagsList } from '../../actions/tags.js'
 import Link from 'next/link'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
@@ -63,13 +63,15 @@ const CreateBlogs = ({ router }) => {
 
 
     const initCategories = () => {
-        CategoryList().then((data) => {
-            if (data.error) {
-                setValues({ ...values, error: data.error })
-            } else {
-                setCategories(data)
-            }
-        })
+        CategoryList()
+            .then((data) => {
+                console.log(data)
+                if (data.error) {
+                    setValues({ ...values, error: data.error })
+                } else {
+                    setCategories(data)
+                }
+            })
     }
     const initTags = () => {
         TagsList().then((data) => {
