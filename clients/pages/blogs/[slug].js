@@ -9,6 +9,7 @@ import BlogCard from '../../components/BlogCard'
 import { API, DOMAIN, FBID, APPNAME } from '../../config'
 import { withRouter } from 'next/router'
 import SmallCard from '../../components/SmallCard'
+import DisqusThread from '../../components/DisqusThread'
 
 const SingleBlog = ({ blog, router }) => {
     const head = () => {
@@ -65,6 +66,13 @@ const SingleBlog = ({ blog, router }) => {
         ))
     }
 
+    const showComments = () => {
+        return (
+            <div>
+                <DisqusThread id={blog._id} title={blog.title} path={`/blog/${blog.slug}`} />
+            </div>
+        )
+    }
     const showrelatedProperties = () => {
         return related && related.map((blog, i) => (
 
@@ -132,7 +140,7 @@ const SingleBlog = ({ blog, router }) => {
                         </div>
                         <div className="container pt-4">
                             <section>
-                                <p>Show Comment</p>
+                                {showComments()}
 
                             </section>
                         </div>
