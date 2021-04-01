@@ -43,6 +43,8 @@ exports.Signup = async(req, res, next) => {
     }
 }
 
+
+
 exports.Signin = async(req, res, next) => {
     const { password, email } = req.body
     console.log(password)
@@ -74,6 +76,13 @@ exports.signout = (req, res) => {
     res.status(200).json({
         message: 'Logout Successfully'
     })
+}
+
+exports.ForgetPassword = (req, res) => {
+
+}
+exports.ResetPassword = (req, res) => {
+
 }
 
 exports.authUserMiddleware = async(req, res, next) => {
