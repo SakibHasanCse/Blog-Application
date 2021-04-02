@@ -5,6 +5,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { getUserProfilewithblog } from '../../actions/user'
 import { API, APPNAME, DOMAIN, FBID } from '../../config'
+import ContactForm from '../../components/form/contactForm'
 const UserNameProfile = ({ user, blogs, query }) => {
     const [searchBlog, setSearchBlog] = useState({})
     const head = () => {
@@ -50,6 +51,7 @@ const UserNameProfile = ({ user, blogs, query }) => {
 
         }
     }
+
 
     return (
         <React.Fragment>
@@ -102,7 +104,7 @@ const UserNameProfile = ({ user, blogs, query }) => {
                                         Message {user.name}
                                     </h5>
                                     <br />
-                                    <p>Contact Form</p>
+                                    <ContactForm authorEmail={user.email} />
                                 </div>
                             </div>
 

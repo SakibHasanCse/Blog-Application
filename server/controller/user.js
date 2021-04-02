@@ -19,7 +19,7 @@ exports.userwithBlogs = async(req, res) => {
         let user;
         console.log(username)
         await User.findOne({ username: username })
-            .select('_id name  username profile createdAt').exec((err, userData) => {
+            .select('_id name  username profile email createdAt').exec((err, userData) => {
                 if (err || !userData) {
                     console.log(err)
                     return res.json({ error: 'User not found' })
@@ -31,7 +31,7 @@ exports.userwithBlogs = async(req, res) => {
                 Blog.find({ postedBy: userId })
                     .populate('tags', '_id name slug')
                     .populate('categories', '_id name slug')
-                    .populate('postedBy', '_id name username')
+                    .populate('postedBy', '_id name username ')
                     .limit(10)
                     .select('_id title  slug excerpt categories tags postedBy createdAt updatedAt')
                     .exec((err, blogData) => {

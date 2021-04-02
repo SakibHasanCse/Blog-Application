@@ -6,8 +6,8 @@ const router = express.Router()
 
 router.post('/signup', userSignUpValidator, runValidation, Signup);
 router.post('/signin', userSiginValidator, runValidation, Signin)
-router.post('/forget-password', ForgetPasswordValidator, runValidation, ForgetPassword)
-router.post('/reset-password', ResetPasswordValidator, runValidation, ResetPassword)
+router.put('/forget-password', ForgetPasswordValidator, runValidation, ForgetPassword)
+router.put('/reset-password', ResetPasswordValidator, runValidation, ResetPassword)
 
 router.get('/signout', signout)
 

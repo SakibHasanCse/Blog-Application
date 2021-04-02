@@ -1,9 +1,10 @@
 const sgMail = require('@sendgrid/mail') //SEND GRID API
+const { errorHandler } = require('../helpers/dbErrorHandel')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 exports.ContactForm = async(req, res) => {
     try {
         const { email, name, message } = req.body
-        console.log(process.env.EMAIL_TO)
+
         const msg = {
             to: process.env.EMAIL_TO,
             from: email,
@@ -24,15 +25,19 @@ exports.ContactForm = async(req, res) => {
         sgMail.send(msg).then(() => {
             return res.status(200).json({ message: 'Form send successfully' })
         }, error => {
-            console.error(error)
             if (error.response) {
-                console.error(error.response.body)
+
+                return res.status(400).json({ error: error.response.body.errors[0].message })
+            } else {
+                return res.status(400).json({ error: 'Internal server error , try again' })
             }
+
 
         })
 
     } catch (error) {
 
+        return res.json({ error: errorHandler(error) })
     }
 
 }
@@ -61,15 +66,18 @@ exports.ContactBlog_AuthorForm = async(req, res) => {
         sgMail.send(msg).then(() => {
             return res.status(200).json({ message: 'Message send successfully' })
         }, error => {
-            console.error(error)
+
+            console.log(error.response.body.errors[0].message)
             if (error.response) {
-                console.error(error.response.body)
+                return res.status(400).json({ error: error.response.body.errors[0].message })
+            } else {
+                return res.status(400).json({ error: 'Internal server error , try again' })
             }
 
         })
 
     } catch (error) {
-
+        return res.json({ error: errorHandler(error) })
     }
 
 }

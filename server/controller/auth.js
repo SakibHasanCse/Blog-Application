@@ -6,6 +6,9 @@ var expressJTW = require('express-jwt')
 const Blog = require('../models/blogs')
 const { errorHandler } = require('../helpers/dbErrorHandel')
 
+const sgMail = require('@sendgrid/mail') //SEND GRID API
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+
 exports.Signup = async(req, res, next) => {
 
     try {
@@ -79,6 +82,54 @@ exports.signout = (req, res) => {
 }
 
 exports.ForgetPassword = (req, res) => {
+    const { email } = req.body
+    User.findOne({ email: email }).exec((err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+                error: 'User not found with this email'
+            })
+        }
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_RESET_TOKEN, { expiresIn: '10m' })
+
+        const msg = {
+            from: process.env.EMAIL_FROM,
+            to: email,
+            subject: `Password reset link`,
+            html: `
+            <h4>Please use the  following link to reset your password</h4>
+            <p><a className="btn btn-info" href="${process.env.CLIENT_URL}/auth/password/rest/${token}" >Reset Password</a></p>
+           
+            <hr />
+            <p>This email may contact sensetive information</p>
+            <p>${process.env.CLIENT_URL}</p>
+            `
+        }
+
+        user.updateOne({ resetPasswordLink: token }, (err, data) => {
+            if (err) {
+                console.log(err)
+                return res.status(400).json({
+                    error: errorHandler(err)
+                })
+            }
+            sgMail.send(msg).then(() => {
+                return res.status(200).json({ message: `Email has been sent to ${email} .Follow the instruction to reset password .Link expires in 10min.` })
+            }, error => {
+                if (error.response) {
+
+                    return res.status(400).json({ error: error.response.body.errors[0].message })
+                } else {
+                    return res.status(400).json({ error: 'Internal server error , try again' })
+                }
+
+
+            })
+        })
+
+
+    })
+
+
 
 }
 exports.ResetPassword = (req, res) => {

@@ -50,6 +50,11 @@ const Header = (props) => {
 
                     </Nav>
 
+                    <Link href="/contact">
+
+                        <NavbarText style={{ cursor: 'pointer' }} className="pr-2"> Contact</NavbarText>
+                    </Link>
+
                     {!isAuth() && <React.Fragment>
                         <Link href="/signin">
 
