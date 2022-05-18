@@ -1,5 +1,5 @@
-# NodeJs - Blogging Web Application
-NodeJs - Blogging Web Application
+# NodeJs - YourBlog Web Application
+NodeJs - YourBlog Web Application
 
 ## Clone The Project
 - You can either use your git commands to clone the project or you can simple download the whole Project
